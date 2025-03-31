@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 
@@ -18,6 +19,16 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                {
+                    property.SetColumnType("timestamp without time zone");
+                }
+            }
+        }
         List<User> users =
         [
             new User
@@ -167,5 +178,21 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
 
         modelBuilder.Entity<Event>().HasData(events);
         modelBuilder.Entity<User>().HasData(users);
+    }
+}
+
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ServerDbContext>
+{
+    public ServerDbContext CreateDbContext(string[] args)
+    {
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        var optionsBuilder = new DbContextOptionsBuilder<ServerDbContext>();
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+
+        return new ServerDbContext(optionsBuilder.Options);
     }
 }
