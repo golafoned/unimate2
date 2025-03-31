@@ -52,7 +52,3 @@ bower_components/
 
 # Ignore JetBrains Rider workspace
 *.sln.ide
-
-# Ignore ASP.NET-specific folders
-wwwroot/node_modules/
-wwwroot/lib/
