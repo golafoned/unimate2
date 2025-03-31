@@ -30,9 +30,21 @@ namespace UniMate2.Controllers
         }
 
         // Lists all users.
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string email)
         {
-            var users = _userRepository.GetAllUsersAsync().Result;
+            var users = await _userRepository.GetAllUsersAsync();
+            
+            // Apply email filter if provided
+            if (!string.IsNullOrEmpty(email))
+            {
+                users = users
+                    .Where(u => u.Email != null && u.Email.Contains(email, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                    
+                // Store the search term for displaying in the view
+                ViewData["CurrentSearch"] = email;
+            }
+            
             return View(users);
         }
 
@@ -80,19 +92,25 @@ namespace UniMate2.Controllers
                 }
             }
             
-            var suggestedUsers = allUsers
-                .Where(u => u.Id != currentUser.Id && u.Gender == currentUser.Gender)
-                .ToList();
-
-            // Apply email filter if provided
+            var suggestedUsers = new List<UniMate2.Models.Domain.User>();
+            
+            // If searching by email, prioritize email search over gender matching
             if (!string.IsNullOrEmpty(email))
             {
-                suggestedUsers = suggestedUsers
-                    .Where(u => u.Email != null && u.Email.Contains(email, StringComparison.OrdinalIgnoreCase))
+                suggestedUsers = allUsers
+                    .Where(u => u.Id != currentUser.Id && u.Email != null && 
+                          u.Email.Contains(email, StringComparison.OrdinalIgnoreCase))
                     .ToList();
                     
                 // Store the search term for displaying in the view
                 ViewData["CurrentSearch"] = email;
+            }
+            else
+            {
+                // Default behavior: show gender-based suggestions
+                suggestedUsers = allUsers
+                    .Where(u => u.Id != currentUser.Id && u.Gender == currentUser.Gender)
+                    .ToList();
             }
 
             var userDtos = _mapper.Map<List<UserDto>>(suggestedUsers);
