@@ -1,0 +1,41 @@
+@model List<UniMate2.Models.Domain.FriendRequest>
+
+@{
+    ViewData["Title"] = "Friend Requests";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Friend Requests</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var request in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@request.Requester.FirstName @request.Requester.LastName</h5>
+                            <p class="card-text">Email: @request.Requester.Email</p>
+                            <div class="d-flex justify-content-between">
+                                <form asp-action="AcceptFriendRequest" asp-route-requestId="@request.Id" method="post">
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                                <form asp-action="RejectFriendRequest" asp-route-requestId="@request.Id" method="post">
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+                                <a href="@Url.Action("DetailsByEmail", "Users", new { email = request.Requester.Email })" class="btn btn-primary">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            You have no pending friend requests.
+        </div>
+    }
+</div>

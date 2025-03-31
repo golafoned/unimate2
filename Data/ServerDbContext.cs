@@ -7,9 +7,13 @@ using UniMate2.Models.Domain.Enums;
 
 namespace UniMate2.Data;
 
-public class ServerDbContext(DbContextOptions<ServerDbContext> options)
-    : IdentityDbContext<User>(options)
+public class ServerDbContext : IdentityDbContext<User>
 {
+    public ServerDbContext(DbContextOptions<ServerDbContext> options)
+        : base(options)
+    {
+    }
+
     public DbSet<FriendRequest> FriendRequests { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<UserImage> UserImages { get; set; }
@@ -18,8 +22,22 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        List<User> users =
-        [
+
+        // Configure FriendRequest entity
+        modelBuilder.Entity<FriendRequest>()
+            .HasOne(fr => fr.Requester)
+            .WithMany()
+            .HasForeignKey(fr => fr.RequesterId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<FriendRequest>()
+            .HasOne(fr => fr.Recipient)
+            .WithMany()
+            .HasForeignKey(fr => fr.RecipientId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        List<User> users = new List<User>
+        {
             new User
             {
                 FirstName = "FirstName2",
@@ -125,7 +143,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 NormalizedUserName = "DAVID.MILLER@EXAMPLE.COM",
                 NormalizedEmail = "DAVID.MILLER@EXAMPLE.COM",
             },
-        ];
+        };
 
         var hasher = new PasswordHasher<User>();
 

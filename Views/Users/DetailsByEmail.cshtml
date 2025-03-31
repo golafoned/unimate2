@@ -1,0 +1,113 @@
+@model UniMate2.Models.Domain.User
+
+@{
+    ViewData["Title"] = $"Profile - {Model.FirstName} {Model.LastName}";
+    bool friendRequestExists = ViewData["FriendRequestExists"] != null && (bool)ViewData["FriendRequestExists"];
+    var friends = ViewData["Friends"] as List<UniMate2.Models.Domain.User>;
+}
+
+<div class="container mt-4">
+    <!-- Display feedback messages -->
+    @if (TempData["FriendRequestMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["FriendRequestMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+    @if (TempData["FriendRequestError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["FriendRequestError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@Model.FirstName @Model.LastName's Profile</h2>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Email:</strong> @Model.Email
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.University))
+                    {
+                        <div class="mb-3">
+                            <strong>University:</strong> @Model.University
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Faculty))
+                    {
+                        <div class="mb-3">
+                            <strong>Faculty:</strong> @Model.Faculty
+                        </div>
+                    }
+
+                    @if (Model.Gender.HasValue)
+                    {
+                        <div class="mb-3">
+                            <strong>Gender:</strong> @Model.Gender.Value
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Bio))
+                    {
+                        <div class="mb-3">
+                            <strong>Bio:</strong> @Model.Bio
+                        </div>
+                    }
+                    
+                    @if (User.Identity.IsAuthenticated && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value != Model.Id)
+                    {
+                        <div class="mt-4">
+                            @if (!friendRequestExists)
+                            {
+                                <form asp-action="SendFriendRequest" asp-route-recipientId="@Model.Id" method="post">
+                                    <button type="submit" class="btn btn-primary">Send Friend Request</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    Friend request already sent or you are already friends.
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Friends</h5>
+                </div>
+                <div class="card-body">
+                    @if (friends != null && friends.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var friend in friends)
+                            {
+                                <li class="list-group-item">
+                                    <a href="@Url.Action("DetailsByEmail", "Users", new { email = friend.Email })">
+                                        @friend.FirstName @friend.LastName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No friends yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
