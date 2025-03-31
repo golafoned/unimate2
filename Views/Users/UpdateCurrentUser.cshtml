@@ -1,0 +1,99 @@
+@model UniMate2.Models.DTO.UpdateUserDto
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Update Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Update Your Profile</h2>
+        <form asp-action="UpdateCurrentUser" method="post">
+            <div class="mb-3">
+                <label asp-for="University" class="form-label"></label>
+                <input asp-for="University" class="form-control" />
+                <span asp-validation-for="University" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Faculty" class="form-label"></label>
+                <input asp-for="Faculty" class="form-control" />
+                <span asp-validation-for="Faculty" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="">Select Gender</option>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                    <option value="2">Other</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Orientation" class="form-label"></label>
+                <select asp-for="Orientation" class="form-select">
+                    <option value="">Select Orientation</option>
+                    <option value="0">Heterosexual</option>
+                    <option value="1">Homosexual</option>
+                    <option value="2">Bisexual</option>
+                </select>
+                <span asp-validation-for="Orientation" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ZodiakSign" class="form-label"></label>
+                <input asp-for="ZodiakSign" class="form-control" placeholder="Enter your Zodiac sign (numeric value)" />
+                <span asp-validation-for="ZodiakSign" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="IsSmoking" class="form-label"></label>
+                <select asp-for="IsSmoking" class="form-select">
+                    <option value="">Select Smoking Status</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                    <option value="2">Not Often</option>
+                </select>
+                <span asp-validation-for="IsSmoking" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="IsDrinking" class="form-label"></label>
+                <select asp-for="IsDrinking" class="form-select">
+                    <option value="">Select Drinking Status</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                    <option value="2">Not Often</option>
+                </select>
+                <span asp-validation-for="IsDrinking" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PersonalityType" class="form-label"></label>
+                <input asp-for="PersonalityType" class="form-control" placeholder="Enter personality type (numeric value)" />
+                <span asp-validation-for="PersonalityType" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LookingFor" class="form-label"></label>
+                <select asp-for="LookingFor" class="form-select">
+                    <option value="">Select What You're Looking For</option>
+                    <option value="0">Friendship</option>
+                    <option value="1">Relationship</option>
+                    <option value="2">New Acquaintances</option>
+                    <option value="3">Just Communication</option>
+                </select>
+                <span asp-validation-for="LookingFor" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Bio" class="form-label"></label>
+                <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

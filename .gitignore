@@ -1,0 +1,58 @@
+# Ignore Visual Studio and Rider files
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore build outputs
+bin/
+obj/
+out/
+
+# Ignore dependencies
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+
+# Ignore logs and debugging files
+*.log
+logs/
+debug.log
+npm-debug.log
+yarn-error.log
+
+# Ignore temporary files
+*.tmp
+*.cache
+*.pdb
+*.swp
+*.sln.cache
+
+# Ignore database and local environment files
+appsettings.Development.json
+appsettings.Local.json
+localdb.mdf
+*.db
+*.sqlite
+*.sqlite-journal
+
+# Ignore .NET-generated files
+Generated_Code/
+publish/
+*.Publish.xml
+node_modules/
+bower_components/
+
+# Ignore Rider-specific files
+.idea/
+*.iml
+
+# Ignore JetBrains Rider workspace
+*.sln.ide
+
+# Ignore ASP.NET-specific folders
+wwwroot/node_modules/
+wwwroot/lib/

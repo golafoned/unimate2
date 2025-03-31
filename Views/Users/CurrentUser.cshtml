@@ -1,0 +1,74 @@
+@model UniMate2.Models.Domain.User
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.FirstName @Model.LastName | Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+      rel="stylesheet" 
+      integrity="sha384-EVSTQN3/azprG1AnmZmz4fZDWfdC4h3soT8X9aOZpG1z9YvN0tWNU6k47fW14KxQ" 
+      crossorigin="anonymous" 
+    />
+</head>
+<body>
+    <div class="container my-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">@Model.FirstName @Model.LastName's Profile</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Profile Image -->
+                    <div class="col-md-4 text-center">
+                        <img 
+                          src="~/images/default-profile.png" 
+                          class="img-fluid rounded-circle mb-3" 
+                          alt="Profile Image" 
+                        />
+                    </div>
+                    <!-- Profile Details -->
+                    <div class="col-md-8">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <strong>Email:</strong> @Model.Email
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Birth Date:</strong> @(Model.BirthDate?.ToString("d") ?? "N/A")
+                            </li>
+                            <li class="list-group-item">
+                                <strong>University:</strong> @Model.University
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Faculty:</strong> @Model.Faculty
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Gender:</strong> @(Model.Gender?.ToString() ?? "N/A")
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Orientation:</strong> @(Model.Orientation?.ToString() ?? "N/A")
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Bio:</strong>
+                                <p class="mb-0">@Model.Bio</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Member since: @(Model?.Id != null ? "Registered User" : "Unknown")
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script 
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-c2kAYFTJdG9Eho4kD5vb5f0NXN/w4NzF2Mx90KJLkAR7OA6xw+XhxdFf9HSKVD5G" 
+      crossorigin="anonymous">
+    </script>
+</body>
+</html>

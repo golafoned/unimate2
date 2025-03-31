@@ -1,0 +1,53 @@
+﻿@model IEnumerable<UniMate2.Models.Domain.Event>
+@{
+    ViewData["Title"] = "Events";
+    // Determine the current sort order from the query string, defaulting to ascending
+    var currentOrder = Context.Request.Query["order"].ToString();
+    if (string.IsNullOrEmpty(currentOrder))
+    {
+        currentOrder = "asc";
+    }
+    // Toggle the order for our button
+    var toggleOrder = currentOrder.Equals("asc", StringComparison.OrdinalIgnoreCase) ? "desc" : "asc";
+}
+
+<div class="container mt-4">
+    <h1>Events</h1>
+    <div class="mb-3">
+        <a class="btn btn-primary" href="@Url.Action("Index", "Events", new { order = toggleOrder })">
+            Order: @toggleOrder.ToUpperInvariant()
+        </a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var evt in Model)
+                {
+                    <tr>
+                        <td>@evt.Title</td>
+                        <td>@evt.Description</td>
+                        <td>@evt.StartDate.ToString("g")</td>
+                        <td>@evt.EndDate.ToString("g")</td>
+                        <td>@evt.Location</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No events available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
