@@ -6,6 +6,19 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">User Suggestions</h2>
+    
+    <!-- Search form -->
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="email" class="form-control" placeholder="Search by email" value="@ViewData["CurrentSearch"]">
+            <button type="submit" class="btn btn-primary">Search</button>
+            @if (!string.IsNullOrEmpty((string)ViewData["CurrentSearch"]))
+            {
+                <a href="@Url.Action("Suggestions")" class="btn btn-outline-secondary">Clear</a>
+            }
+        </div>
+    </form>
+
     @if (Model != null && Model.Any())
     {
         <div class="row">

@@ -56,7 +56,7 @@ namespace UniMate2.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Suggestions()
+        public async Task<IActionResult> Suggestions(string email)
         {
             // Get current user ID from claims.
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -79,9 +79,21 @@ namespace UniMate2.Controllers
                     allUsers[i].Gender = Gender.Female;
                 }
             }
+            
             var suggestedUsers = allUsers
                 .Where(u => u.Id != currentUser.Id && u.Gender == currentUser.Gender)
                 .ToList();
+
+            // Apply email filter if provided
+            if (!string.IsNullOrEmpty(email))
+            {
+                suggestedUsers = suggestedUsers
+                    .Where(u => u.Email != null && u.Email.Contains(email, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                    
+                // Store the search term for displaying in the view
+                ViewData["CurrentSearch"] = email;
+            }
 
             var userDtos = _mapper.Map<List<UserDto>>(suggestedUsers);
             foreach (var user in allUsers)
