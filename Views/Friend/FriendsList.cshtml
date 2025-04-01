@@ -1,0 +1,10 @@
+﻿@model List<UniMate2.Models.Domain.User>
+
+<h2>Your Friends</h2>
+
+<ul>
+    @foreach (var friend in Model)
+    {
+        <li>@friend.FirstName @friend.LastName</li>
+    }
+</ul>

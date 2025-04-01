@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +89,22 @@ namespace UniMate2.Controllers
                 Console.WriteLine($"User Email: {user.Email}, Gender: {user.Gender}");
             }
             return View("Suggestions", userDtos);
+        }
+        [Authorize]
+        public async Task<IActionResult> ViewProfile(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest("User ID is required.");
+            }
+
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         [Authorize]

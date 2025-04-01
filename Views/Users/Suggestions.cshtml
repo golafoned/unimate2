@@ -16,7 +16,8 @@
                         <div class="card-body">
                             <h5 class="card-title">@user.FirstName</h5>
                             <p class="card-text">Email: @user.Email</p>
-                            <a href="@Url.Action("DetailsByEmail", "Users", new { email = user.Email })" class="btn btn-primary">View Profile</a>
+                            <a href="/Users/ViewProfile/@user.Id">View Profile</a>
+
                         </div>
                     </div>
                 </div>

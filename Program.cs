@@ -14,6 +14,7 @@ builder.Services.AddScoped<IFriendsRepository, FriendsRepository>();
 builder.Services.AddScoped<IEventsRepository, EventsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 
 builder
     .Services.AddIdentity<User, IdentityRole>()

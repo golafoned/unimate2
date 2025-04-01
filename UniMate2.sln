@@ -3,20 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMate2", "UniMate2.csproj", "{AB66CC6D-882B-4D59-9DFD-ED629B195D45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniMate2", "UniMate2.csproj", "{AB66CC6D-882B-4D59-9DFD-ED629B195D45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMate.Tests", "..\geom_labs\UniMate.Tests\UniMate.Tests.csproj", "{8E6D5771-6A2D-4ECD-9A90-ABC1F787CFA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E6D5771-6A2D-4ECD-9A90-ABC1F787CFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6D5771-6A2D-4ECD-9A90-ABC1F787CFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6D5771-6A2D-4ECD-9A90-ABC1F787CFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6D5771-6A2D-4ECD-9A90-ABC1F787CFA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD4916C3-48E2-45B7-BED9-7F6B30F29246}
 	EndGlobalSection
 EndGlobal

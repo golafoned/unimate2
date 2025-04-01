@@ -1,0 +1,18 @@
+﻿@model UniMate2.Models.Domain.User
+
+@{
+    ViewData["Title"] = "User`s profile";
+}
+
+<h2>@Model.FirstName @Model.LastName</h2>
+
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Faculty:</strong> @Model.Faculty</p>
+<p><strong>University:</strong> @Model.University</p>
+<p><strong>Bio:</strong> @Model.Bio</p>
+<form asp-controller="Friend" asp-action="SendRequest" method="post">
+    <input type="hidden" name="receiverId" value="@Model.Id" />
+    <button type="submit">Add Friend</button>
+</form>
+
+
