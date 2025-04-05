@@ -1,4 +1,5 @@
 @model UniMate2.Models.DTO.UpdateUserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Update Your Profile</h2>
-        <form asp-action="UpdateCurrentUser" method="post">
+    <div class="container mt-5 mb-5 pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Update Your Profile</h2>
+            <a asp-controller="Users" asp-action="CurrentUser" class="btn btn-secondary">Back to Profile</a>
+        </div>
+        <form asp-controller="Users" asp-action="UpdateCurrentUser" method="post">
             <div class="mb-3">
                 <label asp-for="University" class="form-label"></label>
                 <input asp-for="University" class="form-control" />
@@ -88,8 +92,74 @@
                 <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="Bio" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <div class="mt-4 mb-5 pb-5">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <a asp-controller="Users" asp-action="CurrentUser" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
         </form>
+        
+        <!-- New image upload section -->
+        <div class="mt-5 border-top pt-4">
+            <h3>Profile Images</h3>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            
+            @if (!ViewData.ModelState.IsValid && (ViewData.ModelState[""]?.Errors?.Count ?? 0) > 0)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState[""]?.Errors ?? Enumerable.Empty<Microsoft.AspNetCore.Mvc.ModelBinding.ModelError>())
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+            
+            @if (ViewBag.UserImages != null && ViewBag.UserImages.Count > 0)
+            {
+                <div class="row mb-4">
+                    @foreach (var image in ViewBag.UserImages)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <img src="@image.ImagePath" class="card-img-top" alt="Profile image" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <form asp-controller="Users" asp-action="DeleteProfileImage" method="post">
+                                        <input type="hidden" name="imageId" value="@image.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">You haven't uploaded any profile images yet.</div>
+            }
+            
+            <form asp-controller="Users" asp-action="UploadProfileImage" method="post" enctype="multipart/form-data" class="mt-3">
+                <div class="mb-3">
+                    <label for="profileImage" class="form-label">Upload New Profile Image</label>
+                    <input type="file" id="profileImage" name="profileImage" class="form-control" accept="image/*" required />
+                    <div class="form-text">Maximum file size: 5MB. Supported formats: JPG, PNG, GIF</div>
+                </div>
+                <button type="submit" class="btn btn-success">Upload Image</button>
+            </form>
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger mt-3">
+                    <h6>Error Details:</h6>
+                    <pre>@TempData["ErrorMessage"]</pre>
+                </div>
+            }
+        </div>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

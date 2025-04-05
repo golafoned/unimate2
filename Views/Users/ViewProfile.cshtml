@@ -8,7 +8,29 @@
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h2 class="mb-0">@Model.FirstName @Model.LastName's Profile</h2>
-            <a asp-controller="Users" asp-action="UpdateCurrentUser" class="btn btn-light">Edit Profile</a>
+            <div>
+                @if (ViewData["IsFriend"] != null && ViewData["IsFriend"] as bool? == true)
+                {
+                    <button class="btn btn-light" disabled>
+                        <i class="bi bi-person-check-fill"></i> Friends
+                    </button>
+                }
+                else if (ViewData["IsPendingFriend"] != null && ViewData["IsPendingFriend"] as bool? == true)
+                {
+                    <button class="btn btn-light" disabled>
+                        <i class="bi bi-hourglass-split"></i> Request Pending
+                    </button>
+                }
+                else
+                {
+                    <form asp-controller="Friends" asp-action="SendRequest" method="post" class="d-inline">
+                        <input type="hidden" name="ReceiverEmail" value="@Model.Email" />
+                        <button type="submit" class="btn btn-light">
+                            <i class="bi bi-person-plus"></i> Add Friend
+                        </button>
+                    </form>
+                }
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -51,7 +73,7 @@
                     else
                     {
                         <img src="~/images/default-profile.png" class="img-fluid rounded mb-3" alt="Default Profile Image" />
-                        <p class="text-muted">No profile images uploaded yet.</p>
+                        <p class="text-muted">No profile images uploaded.</p>
                     }
                 </div>
                 
@@ -72,9 +94,6 @@
                         </li>
                         <li class="list-group-item">
                             <strong>Gender:</strong> @(Model.Gender?.ToString() ?? "N/A")
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Orientation:</strong> @(Model.Orientation?.ToString() ?? "N/A")
                         </li>
                         <li class="list-group-item">
                             <strong>Bio:</strong>

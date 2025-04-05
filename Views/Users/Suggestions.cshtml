@@ -13,10 +13,20 @@
             {
                 <div class="col-md-4">
                     <div class="card mb-4">
+                        @if (user.ProfileImagePath != null)
+                        {
+                            <img src="@user.ProfileImagePath" class="card-img-top" alt="Profile Image" 
+                                 style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <img src="~/images/default-profile.png" class="card-img-top" alt="Default Profile Image"
+                                 style="height: 200px; object-fit: cover;">
+                        }
                         <div class="card-body">
                             <h5 class="card-title">@user.FirstName</h5>
                             <p class="card-text">Email: @user.Email</p>
-                            <a href="@Url.Action("DetailsByEmail", "Users", new { email = user.Email })" class="btn btn-primary">View Profile</a>
+                            <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" class="btn btn-primary">View Profile</a>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,52 @@
+@model UniMate2.Models.ViewModels.UserSuggestionsViewModel
+@{
+    ViewData["Title"] = "User Suggestions";
+}
+
+<div class="container mt-4">
+    <h2>People You May Know</h2>
+    
+    @if (Model.Suggestions.Any())
+    {
+        <div class="row">
+            @foreach (var user in Model.Suggestions)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                                {
+                                    <img src="@user.ProfilePicture" alt="Profile Picture" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-secondary me-3 d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-person text-white"></i>
+                                    </div>
+                                }
+                                <div>
+                                    <h5 class="card-title mb-0">@user.FirstName @user.LastName</h5>
+                                    <p class="card-text text-muted">@user.Email</p>
+                                </div>
+                            </div>
+                            
+                            <form asp-controller="Friends" asp-action="SendRequest" method="post">
+                                <input type="hidden" name="ReceiverEmail" value="@user.Email" />
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-person-plus me-2"></i> Add Friend
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No user suggestions available at the moment.
+        </div>
+    }
+</div>

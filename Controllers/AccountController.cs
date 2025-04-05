@@ -19,6 +19,12 @@ namespace UniMate2.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            // If user is already signed in, redirect to home page
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -54,6 +60,12 @@ namespace UniMate2.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // If user is already signed in, redirect to home page
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 

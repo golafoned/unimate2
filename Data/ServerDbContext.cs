@@ -43,6 +43,9 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 IsSmoking = AddictionStatus.No,
                 IsDrinking = AddictionStatus.Yes,
                 LookingFor = LookingForEnum.Friendship,
+                Bio = "Bio5",
+                Email = "user1@example.com",
+                UserName = "user1@example.com",
                 NormalizedUserName = "USER1@EXAMPLE.COM",
                 NormalizedEmail = "USER1@EXAMPLE.COM",
             },
@@ -178,6 +181,13 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
 
         modelBuilder.Entity<Event>().HasData(events);
         modelBuilder.Entity<User>().HasData(users);
+
+        // Configure UserImage relationship
+        modelBuilder
+            .Entity<UserImage>()
+            .HasOne(ui => ui.User)
+            .WithMany(u => u.Images)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 

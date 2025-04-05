@@ -2,16 +2,35 @@ using AutoMapper;
 using UniMate2.Models.Domain;
 using UniMate2.Models.DTO;
 
-namespace Server.Data;
-
-public class MappingProfile : Profile
+namespace UniMate2.Data
 {
-    public MappingProfile()
+    public class MappingProfile : Profile
     {
-        CreateMap<User, UserDto>().ReverseMap();
-        CreateMap<FriendRequest, FriendRequestDto>().ReverseMap();
-        CreateMap<UserImage, UserImageDto>().ReverseMap();
-        CreateMap<UpdateUserDto, User>().ReverseMap();
-        CreateMap<Event, EventDto>();
+        public MappingProfile()
+        {
+            // User mappings
+            CreateMap<User, UserDto>()
+                .ForMember(
+                    dest => dest.ProfileImagePath,
+                    opt =>
+                        opt.MapFrom(src =>
+                            src.Images != null && src.Images.Any()
+                                ? src.Images.OrderBy(i => i.SerialNumber).First().ImagePath
+                                : null
+                        )
+                );
+
+            CreateMap<UserDto, User>();
+            CreateMap<User, UpdateUserDto>().ReverseMap();
+
+            // UserImage mappings
+            CreateMap<UserImage, UserImageDto>();
+            CreateMap<UserImageDto, User>();
+
+            // Other mappings
+            CreateMap<FriendRequest, FriendRequestDto>()
+                .ReverseMap();
+            CreateMap<Event, EventDto>();
+        }
     }
 }
