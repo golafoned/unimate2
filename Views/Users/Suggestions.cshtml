@@ -5,38 +5,159 @@
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">User Suggestions</h2>
+    <h2 class="mb-4 text-center">Find Your Match</h2>
+    
+    @Html.AntiForgeryToken()
+
     @if (Model != null && Model.Any())
     {
-        <div class="row">
+        <div class="card-container">
             @foreach (var user in Model)
             {
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        @if (user.ProfileImagePath != null)
-                        {
-                            <img src="@user.ProfileImagePath" class="card-img-top" alt="Profile Image" 
-                                 style="height: 200px; object-fit: cover;">
-                        }
-                        else
-                        {
-                            <img src="~/images/default-profile.png" class="card-img-top" alt="Default Profile Image"
-                                 style="height: 200px; object-fit: cover;">
-                        }
+                <div class="suggestion-card" data-user-id="@user.Id">
+                    <div class="card">
+                        <div class="card-image-container">
+                            @if (user.ProfileImagePath != null)
+                            {
+                                <img src="@user.ProfileImagePath" class="card-img" alt="Profile Image">
+                            }
+                            else
+                            {
+                                <img src="~/images/default-profile.png" class="card-img" alt="Default Profile Image">
+                            }
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">@user.FirstName</h5>
-                            <p class="card-text">Email: @user.Email</p>
-                            <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" class="btn btn-primary">View Profile</a>
+                            <h3 class="card-title">@user.FirstName</h3>
+                            <p class="card-text">@(string.IsNullOrEmpty(user.Bio) ? "No bio available" : user.Bio)</p>
+                            <p class="card-text small text-muted">@user.Email</p>
                         </div>
                     </div>
                 </div>
             }
         </div>
+
+        <div class="action-buttons text-center mt-4">
+            <button class="btn btn-lg btn-danger dislike-btn"><i class="bi bi-x-circle"></i> Dislike</button>
+            <a id="view-profile-btn" href="#" class="btn btn-lg btn-info mx-2"><i class="bi bi-person"></i> View Profile</a>
+            <button class="btn btn-lg btn-success like-btn"><i class="bi bi-heart-fill"></i> Like</button>
+        </div>
+        
+        <div class="no-more-suggestions text-center mt-5 d-none">
+            <div class="alert alert-info p-5">
+                <h3><i class="bi bi-emoji-smile"></i> You've seen all suggestions!</h3>
+                <p>Check back later for more suggestions.</p>
+            </div>
+        </div>
     }
     else
     {
-        <div class="alert alert-warning" role="alert">
-            No suggestions available.
+        <div class="alert alert-warning text-center" role="alert">
+            <h3><i class="bi bi-emoji-neutral"></i> No suggestions available.</h3>
+            <p>Check back later for new suggestions.</p>
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const cards = $('.suggestion-card');
+            let currentCardIndex = 0;
+            
+            // Initially show only the first card
+            if (cards.length > 0) {
+                updateCardDisplay();
+            }
+            
+            // Handle like button click
+            $('.like-btn').on('click', function() {
+                if (currentCardIndex < cards.length) {
+                    const currentCard = $(cards[currentCardIndex]);
+                    const userId = currentCard.data('user-id');
+                    
+                    // Animation for like
+                    currentCard.addClass('slide-right');
+                    
+                    // Send like action to the server
+                    $.ajax({
+                        url: '@Url.Action("Create", "Like")',
+                        type: 'POST',
+                        data: {
+                            likedUserId: userId,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function(response) {
+                            console.log('Liked user:', userId);
+                        },
+                        error: function(xhr) {
+                            console.error('Error liking user:', xhr.responseText);
+                        }
+                    });
+                    
+                    // Move to next card after animation
+                    setTimeout(() => {
+                        currentCardIndex++;
+                        updateCardDisplay();
+                    }, 300);
+                }
+            });
+            
+            // Handle dislike button click
+            $('.dislike-btn').on('click', function() {
+                if (currentCardIndex < cards.length) {
+                    const currentCard = $(cards[currentCardIndex]);
+                    const userId = currentCard.data('user-id');
+                    
+                    // Animation for dislike
+                    currentCard.addClass('slide-left');
+                    
+                    // Send dislike action to the server
+                    $.ajax({
+                        url: '@Url.Action("Create", "Dislike")',
+                        type: 'POST',
+                        data: {
+                            dislikedUserId: userId,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function() {
+                            console.log('Disliked user:', userId);
+                        },
+                        error: function(xhr) {
+                            console.error('Error disliking user:', xhr.responseText);
+                        }
+                    });
+                    
+                    // Move to next card after animation
+                    setTimeout(() => {
+                        currentCardIndex++;
+                        updateCardDisplay();
+                    }, 300);
+                }
+            });
+            
+            // Update view profile button URL
+            function updateViewProfileLink() {
+                if (currentCardIndex < cards.length) {
+                    const userId = $(cards[currentCardIndex]).data('user-id');
+                    $('#view-profile-btn').attr('href', '@Url.Action("ViewProfile", "Users")/' + userId);
+                }
+            }
+            
+            // Update which card is showing
+            function updateCardDisplay() {
+                // Hide all cards
+                cards.hide();
+                
+                // Show current card if available
+                if (currentCardIndex < cards.length) {
+                    $(cards[currentCardIndex]).show();
+                    updateViewProfileLink();
+                } else {
+                    // No more cards, show the "no more" message
+                    $('.action-buttons').hide();
+                    $('.no-more-suggestions').removeClass('d-none');
+                }
+            }
+        });
+    </script>
+}

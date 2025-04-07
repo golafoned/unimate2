@@ -1,12 +1,20 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniMate2.Data;
 using UniMate2.Models.Domain;
 
 namespace UniMate2.Repositories
 {
-    public class LikeRepository(ServerDbContext context) : ILikeRepository
+    public class LikeRepository : ILikeRepository
     {
-        private readonly ServerDbContext _context = context;
+        private readonly ServerDbContext _context;
+        private readonly UserManager<User> _userManager;
+
+        public LikeRepository(ServerDbContext context, UserManager<User> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
 
         public async Task<Like?> GetLikeAsync(Guid id)
         {
@@ -15,7 +23,17 @@ namespace UniMate2.Repositories
 
         public async Task<List<Like>> GetAllLikesAsync()
         {
-            return await _context.Likes.ToListAsync();
+            return await _context
+                .Likes.OrderBy(l => l.LikedAt) // Add ordering for predictability
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetLikedUserIdsAsync(string userId)
+        {
+            return await _context
+                .Likes.Where(l => l.LikerId == userId)
+                .Select(l => l.LikedId)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Like like)
@@ -38,9 +56,54 @@ namespace UniMate2.Repositories
 
         public async Task<bool> LikeExistsAsync(string likerId, string likedId)
         {
-            return await _context.Likes.AnyAsync(l =>
-                l.Liker.Id == likerId && l.Liked.Id == likedId
-            );
+            return await _context.Likes.AnyAsync(l => l.LikerId == likerId && l.LikedId == likedId);
+        }
+
+        public async Task<List<Like>> GetUserLikesWithDetailsAsync(string userId)
+        {
+            return await _context
+                .Likes.Include(l => l.Liked)
+                .ThenInclude(u => u.Images)
+                .Where(l => l.LikerId == userId)
+                .OrderByDescending(l => l.LikedAt)
+                .ToListAsync();
+        }
+
+        public async Task<List<Like>> GetLikesReceivedWithDetailsAsync(string userId)
+        {
+            return await _context
+                .Likes.Include(l => l.Liker)
+                .ThenInclude(u => u.Images)
+                .Where(l => l.LikedId == userId)
+                .OrderByDescending(l => l.LikedAt)
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetUsersWhoLikedMeIdsAsync(string userId)
+        {
+            return await _context
+                .Likes.Where(l => l.LikedId == userId)
+                .Select(l => l.LikerId)
+                .ToListAsync();
+        }
+
+        public async Task<bool> CreateLikeAsync(string likingUserId, string likedUserId)
+        {
+            // Check if like already exists
+            if (await LikeExistsAsync(likingUserId, likedUserId))
+            {
+                return false;
+            }
+
+            var like = new Like
+            {
+                LikerId = likingUserId,
+                LikedId = likedUserId,
+                LikedAt = DateTime.UtcNow,
+            };
+
+            await AddAsync(like);
+            return true;
         }
     }
 }

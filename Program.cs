@@ -20,10 +20,17 @@ builder.Logging.SetMinimumLevel(LogLevel.Information);
 builder.Services.AddDbContext<ServerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+// Register repositories in the right order to avoid circular dependencies
+builder.Services.AddScoped<IDislikeRepository, DislikeRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 builder.Services.AddScoped<IFriendsRepository, FriendsRepository>();
 builder.Services.AddScoped<IEventsRepository, EventsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Add Bootstrap Icons
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder
     .Services.AddIdentity<User, IdentityRole>()
@@ -35,9 +42,6 @@ builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10 MB
 });
-
-// Add IWebHostEnvironment to services to ensure it's properly initialized
-builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
 
 builder.Services.AddControllersWithViews();
 var app = builder.Build();

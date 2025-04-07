@@ -1,22 +1,131 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+/* Tinder-like card styling */
+.card-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 450px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.suggestion-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+}
+
+.suggestion-card .card {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-image-container {
+    height: 65%;
+    overflow: hidden;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+    height: 35%;
+    overflow: auto;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    border-radius: 50px;
+    width: 120px;
+    margin: 0 5px;
+}
+
+.like-btn {
+    background-color: #2ecc71;
+    border: none;
+}
+
+.dislike-btn {
+    background-color: #e74c3c;
+    border: none;
+}
+
+/* Animations */
+.slide-left {
+    animation: slideLeft 0.3s forwards;
+}
+
+.slide-right {
+    animation: slideRight 0.3s forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(0) rotate(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50px) rotate(-10deg);
+        opacity: 0;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(0) rotate(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(50px) rotate(10deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-container {
+        height: 400px;
+    }
+
+    .action-buttons .btn {
+        width: 100px;
+    }
 }

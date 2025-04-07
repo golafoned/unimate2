@@ -15,6 +15,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
     public DbSet<Event> Events { get; set; }
     public DbSet<UserImage> UserImages { get; set; }
     public DbSet<Like> Likes { get; set; }
+    public DbSet<UserDislike> UserDislikes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,17 +26,19 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
                 {
-                    property.SetColumnType("timestamp without time zone");
+                    // Change to timestamp with time zone to support UTC dates
+                    property.SetColumnType("timestamp with time zone");
                 }
             }
         }
-        List<User> users =
-        [
+
+        List<User> users = new List<User>
+        {
             new User
             {
                 FirstName = "FirstName2",
                 LastName = "LastName2",
-                BirthDate = new DateTime(2000, 1, 1),
+                BirthDate = DateTime.SpecifyKind(new DateTime(2000, 1, 1), DateTimeKind.Utc),
                 University = "University1",
                 Faculty = "Faculty2",
                 Gender = Gender.Quadrobist,
@@ -53,7 +56,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 FirstName = "FirstName2",
                 LastName = "LastName2",
-                BirthDate = new DateTime(2002, 1, 1),
+                BirthDate = DateTime.SpecifyKind(new DateTime(2002, 1, 1), DateTimeKind.Utc),
                 University = "University2",
                 Faculty = "Faculty2",
                 Gender = Gender.Male,
@@ -71,7 +74,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 FirstName = "Alice",
                 LastName = "Johnson",
-                BirthDate = new DateTime(1995, 5, 15),
+                BirthDate = DateTime.SpecifyKind(new DateTime(1995, 5, 15), DateTimeKind.Utc),
                 University = "Tech University",
                 Faculty = "Engineering",
                 Gender = Gender.Female,
@@ -89,7 +92,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 FirstName = "Bob",
                 LastName = "Smith",
-                BirthDate = new DateTime(1988, 8, 22),
+                BirthDate = DateTime.SpecifyKind(new DateTime(1988, 8, 22), DateTimeKind.Utc),
                 University = "State University",
                 Faculty = "Business",
                 Gender = Gender.Male,
@@ -107,7 +110,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 FirstName = "Carol",
                 LastName = "Davis",
-                BirthDate = new DateTime(1992, 3, 30),
+                BirthDate = DateTime.SpecifyKind(new DateTime(1992, 3, 30), DateTimeKind.Utc),
                 University = "Arts College",
                 Faculty = "Design",
                 Gender = Gender.Male,
@@ -125,7 +128,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             {
                 FirstName = "David",
                 LastName = "Miller",
-                BirthDate = new DateTime(1990, 7, 19),
+                BirthDate = DateTime.SpecifyKind(new DateTime(1990, 7, 19), DateTimeKind.Utc),
                 University = "Engineering Institute",
                 Faculty = "Mechanical",
                 Gender = Gender.Male,
@@ -139,7 +142,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 NormalizedUserName = "DAVID.MILLER@EXAMPLE.COM",
                 NormalizedEmail = "DAVID.MILLER@EXAMPLE.COM",
             },
-        ];
+        };
 
         var hasher = new PasswordHasher<User>();
 
@@ -155,8 +158,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 Id = Guid.NewGuid(),
                 Title = "Community Meetup",
                 Description = "A meetup for community members.",
-                StartDate = new DateTime(2023, 10, 15),
-                EndDate = new DateTime(2023, 10, 15),
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15), DateTimeKind.Utc),
                 Location = "City Park",
             },
             new Event
@@ -164,8 +167,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 Id = Guid.NewGuid(),
                 Title = "Tech Conference",
                 Description = "Annual technology conference.",
-                StartDate = new DateTime(2023, 11, 20),
-                EndDate = new DateTime(2023, 11, 22),
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 11, 20), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 11, 22), DateTimeKind.Utc),
                 Location = "Convention Center",
             },
             new Event
@@ -173,8 +176,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 Id = Guid.NewGuid(),
                 Title = "Workshop",
                 Description = "Workshop on emerging technologies.",
-                StartDate = new DateTime(2023, 12, 10),
-                EndDate = new DateTime(2023, 12, 10),
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10), DateTimeKind.Utc),
                 Location = "Tech Institute",
             },
         };
@@ -188,6 +191,23 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             .HasOne(ui => ui.User)
             .WithMany(u => u.Images)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Configure the UserDislike entity
+        modelBuilder.Entity<UserDislike>().HasKey(ud => ud.Id);
+
+        modelBuilder
+            .Entity<UserDislike>()
+            .HasOne(ud => ud.DislikingUser)
+            .WithMany()
+            .HasForeignKey(ud => ud.DislikingUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder
+            .Entity<UserDislike>()
+            .HasOne(ud => ud.DislikedUser)
+            .WithMany()
+            .HasForeignKey(ud => ud.DislikedUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 

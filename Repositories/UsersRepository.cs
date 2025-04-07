@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using UniMate2.Data;
 using UniMate2.Models.Domain;
 
@@ -11,11 +10,20 @@ namespace UniMate2.Repositories
     {
         private readonly UserManager<User> _userManager;
         private readonly ServerDbContext _context;
+        private readonly IDislikeRepository _dislikeRepository;
+        private readonly ILikeRepository _likeRepository;
 
-        public UsersRepository(UserManager<User> userManager, ServerDbContext context)
+        public UsersRepository(
+            UserManager<User> userManager,
+            ServerDbContext context,
+            IDislikeRepository dislikeRepository,
+            ILikeRepository likeRepository
+        )
         {
             _userManager = userManager;
             _context = context;
+            _dislikeRepository = dislikeRepository;
+            _likeRepository = likeRepository;
         }
 
         public async Task<User?> GetUserAsync(ClaimsPrincipal user)
@@ -115,9 +123,37 @@ namespace UniMate2.Repositories
                 .Select(fr => fr.Sender.Id == userId ? fr.Receiver.Id : fr.Sender.Id)
                 .ToListAsync();
 
-            // Then get users who are not in that list and not the current user
+            // Get IDs of disliked users
+            var dislikedUserIds = await _context
+                .UserDislikes.Where(ud => ud.DislikingUserId == userId)
+                .Select(ud => ud.DislikedUserId)
+                .ToListAsync();
+
+            // Get IDs of users who disliked the current user
+            var usersWhoDislikedMeIds = await _context
+                .UserDislikes.Where(ud => ud.DislikedUserId == userId)
+                .Select(ud => ud.DislikingUserId)
+                .ToListAsync();
+
+            // Get IDs of liked users (if you have a Likes table)
+            var likedUserIds = await _context
+                .Likes.Where(l => l.LikerId == userId)
+                .Select(l => l.LikedId)
+                .ToListAsync();
+
+            // Combine all IDs to exclude
+            var excludedUserIds = new List<string>();
+            excludedUserIds.AddRange(friendRequestUserIds);
+            excludedUserIds.AddRange(dislikedUserIds);
+            excludedUserIds.AddRange(usersWhoDislikedMeIds);
+            excludedUserIds.AddRange(likedUserIds);
+            excludedUserIds = excludedUserIds.Distinct().ToList();
+
+            // Include the Images collection when fetching users
             var suggestions = await _userManager
-                .Users.Where(u => u.Id != userId && !friendRequestUserIds.Contains(u.Id))
+                .Users.Include(u => u.Images)
+                .Where(u => u.Id != userId && !excludedUserIds.Contains(u.Id))
+                .OrderBy(u => u.FirstName) // Add ordering to make results predictable
                 .Take(count)
                 .ToListAsync();
 

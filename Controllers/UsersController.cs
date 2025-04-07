@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 using UniMate2.Models.DTO;
+using UniMate2.Models.ViewModels;
 using UniMate2.Repositories;
 
 namespace UniMate2.Controllers
@@ -25,13 +26,17 @@ namespace UniMate2.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<UsersController> _logger;
         private readonly IFriendsRepository _friendsRepository;
+        private readonly ILikeRepository _likeRepository;
+        private readonly IDislikeRepository _dislikeRepository;
 
         public UsersController(
             IUsersRepository userRepository,
             IMapper mapper,
             IWebHostEnvironment webHostEnvironment,
             ILogger<UsersController> logger,
-            IFriendsRepository friendsRepository
+            IFriendsRepository friendsRepository,
+            ILikeRepository likeRepository,
+            IDislikeRepository dislikeRepository
         )
         {
             _userRepository = userRepository;
@@ -39,6 +44,8 @@ namespace UniMate2.Controllers
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
             _friendsRepository = friendsRepository;
+            _likeRepository = likeRepository;
+            _dislikeRepository = dislikeRepository;
             _logger.LogInformation("UsersController initialized");
         }
 
@@ -106,32 +113,16 @@ namespace UniMate2.Controllers
                 return Challenge();
             }
 
-            var currentUser = await _userRepository.GetUserByIdAsync(userId);
-            if (currentUser == null)
-            {
-                _logger.LogWarning("User not found in database: {UserId}", userId);
-                return Challenge();
-            }
-
-            var allUsers = await _userRepository.GetAllUsersAsync();
-            for (int i = 0; i < allUsers.Count; i++)
-            {
-                if (i % 2 == 0)
-                {
-                    allUsers[i].Gender = Gender.Female;
-                }
-            }
-            var suggestedUsers = allUsers
-                .Where(u => u.Id != currentUser.Id && u.Gender == currentUser.Gender)
-                .ToList();
-
-            var userDtos = _mapper.Map<List<UserDto>>(suggestedUsers);
+            // Use the repository's GetUserSuggestionsAsync which already filters out disliked users
+            var suggestedUsers = await _userRepository.GetUserSuggestionsAsync(userId, 20);
 
             _logger.LogInformation(
-                "Generated {SuggestionCount} suggestions for user {UserName}",
-                userDtos.Count,
-                currentUser.UserName
+                "Generated {SuggestionCount} suggestions for user {UserId}",
+                suggestedUsers.Count,
+                userId
             );
+
+            var userDtos = _mapper.Map<List<UserDto>>(suggestedUsers);
             return View("Suggestions", userDtos);
         }
 
@@ -536,6 +527,82 @@ namespace UniMate2.Controllers
 
             _logger.LogInformation("Retrieved user with ID: {Id}", id);
             return View(user);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LikeDislikeLog()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                _logger.LogWarning("Authentication failure - no user ID found");
+                return Unauthorized();
+            }
+
+            _logger.LogInformation("LikeDislikeLog action called for user {UserId}", userId);
+
+            var viewModel = new LikeDislikeLogViewModel();
+
+            // Get users I liked
+            var usersILiked = await _likeRepository.GetUserLikesWithDetailsAsync(userId);
+            viewModel.UsersILiked = usersILiked
+                .Select(l => new UserInteractionViewModel
+                {
+                    Id = l.LikedId,
+                    Name = $"{l.Liked.FirstName} {l.Liked.LastName}",
+                    ProfileImageUrl = GetProfileImageUrl(l.Liked),
+                    Timestamp = l.LikedAt,
+                })
+                .ToList();
+
+            // Get users who liked me
+            var usersWhoLikedMe = await _likeRepository.GetLikesReceivedWithDetailsAsync(userId);
+            viewModel.UsersWhoLikedMe = usersWhoLikedMe
+                .Select(l => new UserInteractionViewModel
+                {
+                    Id = l.LikerId,
+                    Name = $"{l.Liker.FirstName} {l.Liker.LastName}",
+                    ProfileImageUrl = GetProfileImageUrl(l.Liker),
+                    Timestamp = l.LikedAt,
+                })
+                .ToList();
+
+            // Get users I disliked
+            var usersIDisliked = await _dislikeRepository.GetUserDislikesWithDetailsAsync(userId);
+            viewModel.UsersIDisliked = usersIDisliked
+                .Select(d => new UserInteractionViewModel
+                {
+                    Id = d.DislikedUserId,
+                    Name = $"{d.DislikedUser.FirstName} {d.DislikedUser.LastName}",
+                    ProfileImageUrl = GetProfileImageUrl(d.DislikedUser),
+                    Timestamp = d.CreatedAt,
+                })
+                .ToList();
+
+            // Get users who disliked me
+            var usersWhoDislikedMe = await _dislikeRepository.GetDislikesReceivedWithDetailsAsync(
+                userId
+            );
+            viewModel.UsersWhoDislikedMe = usersWhoDislikedMe
+                .Select(d => new UserInteractionViewModel
+                {
+                    Id = d.DislikingUserId,
+                    Name = $"{d.DislikingUser.FirstName} {d.DislikingUser.LastName}",
+                    ProfileImageUrl = GetProfileImageUrl(d.DislikingUser),
+                    Timestamp = d.CreatedAt,
+                })
+                .ToList();
+
+            return View(viewModel);
+        }
+
+        private string GetProfileImageUrl(User user)
+        {
+            if (user.Images != null && user.Images.Any())
+            {
+                return user.Images.OrderBy(i => i.SerialNumber).First().ImagePath;
+            }
+            return "/images/default-avatar.png"; // Default image path
         }
     }
 }
