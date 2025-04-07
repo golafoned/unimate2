@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMate2", "UniMate2.csproj", "{AB66CC6D-882B-4D59-9DFD-ED629B195D45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMate2", "UniMate2\UniMate2.csproj", "{CE1564DE-D97D-44E1-A7A1-4F699DB24C5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMate2.Tests", "UniMate2.Tests\UniMate2.Tests.csproj", "{A2F84C7B-9D59-4D0C-8CF8-D385AE0D084E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +16,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB66CC6D-882B-4D59-9DFD-ED629B195D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1564DE-D97D-44E1-A7A1-4F699DB24C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1564DE-D97D-44E1-A7A1-4F699DB24C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1564DE-D97D-44E1-A7A1-4F699DB24C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1564DE-D97D-44E1-A7A1-4F699DB24C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F84C7B-9D59-4D0C-8CF8-D385AE0D084E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F84C7B-9D59-4D0C-8CF8-D385AE0D084E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F84C7B-9D59-4D0C-8CF8-D385AE0D084E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F84C7B-9D59-4D0C-8CF8-D385AE0D084E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
