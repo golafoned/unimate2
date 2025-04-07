@@ -24,7 +24,7 @@ namespace UniMate2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Suggestions(int count = 10)
+        public async Task<IActionResult> Suggestions(string searchTerm = null, int count = 10)
         {
             var currentUser = await _usersRepository.GetUserByEmailAsync(User.Identity!.Name!);
             if (currentUser == null)
@@ -32,7 +32,16 @@ namespace UniMate2.Controllers
                 return Unauthorized();
             }
 
-            var suggestions = await _usersRepository.GetUserSuggestionsAsync(currentUser.Id, count);
+            List<User> suggestions;
+            
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                suggestions = await _usersRepository.SearchUsersAsync(currentUser.Id, searchTerm, count);
+            }
+            else
+            {
+                suggestions = await _usersRepository.GetUserSuggestionsAsync(currentUser.Id, count);
+            }
 
             var viewModel = new UserSuggestionsViewModel
             {
@@ -47,6 +56,7 @@ namespace UniMate2.Controllers
                         ProfilePicture = GetProfilePictureUrl(u),
                     }),
                 ],
+                SearchTerm = searchTerm
             };
 
             return View(viewModel);

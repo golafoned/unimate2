@@ -15,4 +15,5 @@ public interface IUsersRepository
     Task<IdentityResult> UpdateImageAsync(string userId, string imagePath);
     Task<IdentityResult> DeleteImageAsync(string userId);
     Task<List<User>> GetUserSuggestionsAsync(string userId, int count = 10);
+    Task<List<User>> SearchUsersAsync(string userId, string searchTerm, int count = 20);
 }

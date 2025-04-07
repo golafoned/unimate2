@@ -159,5 +159,41 @@ namespace UniMate2.Repositories
 
             return suggestions;
         }
+
+        public async Task<List<User>> SearchUsersAsync(string userId, string searchTerm, int count = 20)
+        {
+            // Get the current user
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            if (currentUser == null || string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return new List<User>();
+            }
+
+            // Get IDs of users who already have a friendship connection
+            var friendRequestUserIds = await _context
+                .FriendRequests.Where(fr => fr.Sender.Id == userId || fr.Receiver.Id == userId)
+                .Select(fr => fr.Sender.Id == userId ? fr.Receiver.Id : fr.Sender.Id)
+                .ToListAsync();
+
+            // Get IDs of disliked users
+            var dislikedUserIds = await _context
+                .UserDislikes.Where(ud => ud.DislikingUserId == userId)
+                .Select(ud => ud.DislikedUserId)
+                .ToListAsync();
+
+            // Search for users by name or email
+            var searchTermLower = searchTerm.ToLower();
+            var users = await _userManager.Users
+                .Where(u => u.Id != userId)
+                .Where(u => !friendRequestUserIds.Contains(u.Id))
+                .Where(u => !dislikedUserIds.Contains(u.Id))
+                .Where(u => u.Email.ToLower().Contains(searchTermLower) || 
+                            u.FirstName.ToLower().Contains(searchTermLower) || 
+                            u.LastName.ToLower().Contains(searchTermLower))
+                .Take(count)
+                .ToListAsync();
+
+            return users;
+        }
     }
 }
