@@ -147,15 +147,47 @@ namespace UniMate2.Controllers
 
             currentUser.University = updateUserDto.University ?? currentUser.University;
             currentUser.Faculty = updateUserDto.Faculty ?? currentUser.Faculty;
-            currentUser.Gender = updateUserDto.Gender ?? currentUser.Gender;
-            currentUser.Orientation = updateUserDto.Orientation ?? currentUser.Orientation;
+
+            // Fix type mismatches with proper null checking
+            if (updateUserDto.Gender.HasValue)
+                currentUser.Gender = updateUserDto.Gender.Value;
+
+            if (updateUserDto.Orientation.HasValue)
+                currentUser.Orientation = updateUserDto.Orientation.Value;
+
             currentUser.ZodiakSign = updateUserDto.ZodiakSign ?? currentUser.ZodiakSign;
-            currentUser.IsSmoking = updateUserDto.IsSmoking ?? currentUser.IsSmoking;
-            currentUser.IsDrinking = updateUserDto.IsDrinking ?? currentUser.IsDrinking;
+
+            if (updateUserDto.IsSmoking.HasValue)
+                currentUser.IsSmoking = updateUserDto.IsSmoking.Value;
+
+            if (updateUserDto.IsDrinking.HasValue)
+                currentUser.IsDrinking = updateUserDto.IsDrinking.Value;
+
+            // Ensure proper handling of the PersonalityType
             currentUser.PersonalityType =
-                updateUserDto.PersonalityType ?? currentUser.PersonalityType;
-            currentUser.LookingFor = updateUserDto.LookingFor ?? currentUser.LookingFor;
+                !string.IsNullOrEmpty(updateUserDto.PersonalityType)
+                && Enum.TryParse<PersonalityType>(
+                    updateUserDto.PersonalityType,
+                    out var personalityType
+                )
+                    ? personalityType
+                    : currentUser.PersonalityType;
+
+            if (updateUserDto.LookingFor.HasValue)
+                currentUser.LookingFor = updateUserDto.LookingFor.Value;
+
             currentUser.Bio = updateUserDto.Bio ?? currentUser.Bio;
+
+            // Add BirthDate handling - ensure UTC for PostgreSQL compatibility
+            if (updateUserDto.BirthDate.HasValue)
+            {
+                // Convert to UTC - PostgreSQL requires DateTime.Kind = DateTimeKind.Utc
+                DateTime utcBirthDate = DateTime.SpecifyKind(
+                    updateUserDto.BirthDate.Value,
+                    DateTimeKind.Utc
+                );
+                currentUser.BirthDate = utcBirthDate;
+            }
 
             var result = await _userRepository.UpdateUserAsync(currentUser);
             if (!result.Succeeded)

@@ -34,15 +34,9 @@ namespace UniMate2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(model);
+                return View(model);
             }
-            var user = new User
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-            };
+            var user = new User { UserName = model.Email, Email = model.Email };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -51,10 +45,14 @@ namespace UniMate2.Controllers
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return BadRequest(model);
+                return View(model);
             }
 
-            return RedirectToAction("Index", "Home");
+            // Sign in the user after registration
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            // Redirect to the profile update page for completing registration
+            return RedirectToAction("UpdateCurrentUser", "Users");
         }
 
         [HttpGet]
