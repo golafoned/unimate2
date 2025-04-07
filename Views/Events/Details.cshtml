@@ -1,0 +1,27 @@
+﻿@model UniMate2.Models.Domain.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h2>Event Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-2">Title</dt>
+    <dd class="col-sm-10">@Model.Title</dd>
+
+    <dt class="col-sm-2">Description</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+
+    <dt class="col-sm-2">Start</dt>
+    <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-2">End</dt>
+    <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-2">Location</dt>
+    <dd class="col-sm-10">@Model.Location</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

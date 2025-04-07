@@ -1,0 +1,32 @@
+﻿@* @using UniMate2.Models.Domain.Enums
+@model UniMate2.Models.Domain.FriendRequest
+
+@{
+    ViewData["Title"] = "Edit Friend Request";
+}
+
+<h1>Edit Friend Request</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="SenderId" class="control-label"></label>
+        <input asp-for="SenderId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ReceiverId" class="control-label"></label>
+        <input asp-for="ReceiverId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<UniMate2.Models.Domain.FriendRequestStatus>()" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="SentAt" class="control-label"></label>
+        <input asp-for="SentAt" type="datetime-local" class="form-control" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+ *@

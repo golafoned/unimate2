@@ -1,0 +1,25 @@
+﻿@* @using UniMate2.Models.Enums
+@model UniMate2.Models.Domain.FriendRequest
+
+@{
+    ViewData["Title"] = "Friend Request Details";
+}
+
+<h1>Friend Request Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Sender</dt>
+        <dd class="col-sm-10">@Model.SenderId</dd>
+        <dt class="col-sm-2">Receiver</dt>
+        <dd class="col-sm-10">@Model.ReceiverId</dd>
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+        <dt class="col-sm-2">Sent At</dt>
+        <dd class="col-sm-10">@Model.SentAt</dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>
+ *@

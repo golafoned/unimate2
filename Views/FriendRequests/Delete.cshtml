@@ -1,0 +1,31 @@
+﻿@using UniMate2.Models.Enums
+@model UniMate2.Models.Domain.FriendRequest
+
+@{
+    ViewData["Title"] = "Delete Friend Request";
+}
+
+<h1>Delete Friend Request</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<div>
+    <h4>FriendRequest</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Sender</dt>
+        <dd class="col-sm-10">@Model.SenderId</dd>
+        <dt class="col-sm-2">Receiver</dt>
+        <dd class="col-sm-10">@Model.ReceiverId</dd>
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+        <dt class="col-sm-2">Sent At</dt>
+        <dd class="col-sm-10">@Model.SentAt</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
