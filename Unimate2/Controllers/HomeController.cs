@@ -9,14 +9,8 @@ using UniMate2.Models.Domain;
 
 namespace UniMate2.Controllers;
 
-public class HomeController(
-    ILogger<HomeController> logger,
-    ServerDbContext context,
-    UserManager<User> userManager
-) : Controller
+public class HomeController(UserManager<User> userManager) : Controller
 {
-    private readonly DbContext _context = context;
-    private readonly ILogger<HomeController> _logger = logger;
     private readonly UserManager<User> _userManager = userManager;
 
     public IActionResult Index()
