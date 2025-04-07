@@ -33,7 +33,7 @@ namespace UniMate2.Tests.Controllers
             userManagerMock.Setup(um => um.Users).Returns(users);
 
             using var context = ServerDbContextFactory.Create();
-            var controller = new HomeController(logger.Object, context, userManagerMock.Object);
+            var controller = new HomeController(userManagerMock.Object);
 
             // Act
             var result = controller.Index() as ViewResult;
@@ -55,7 +55,7 @@ namespace UniMate2.Tests.Controllers
             var userManagerMock = UserManagerMock.CreateMock();
 
             using var context = ServerDbContextFactory.Create();
-            var controller = new HomeController(logger.Object, context, userManagerMock.Object);
+            var controller = new HomeController(userManagerMock.Object);
 
             // Set up HttpContext to prevent null reference exception
             var httpContext = new DefaultHttpContext();
