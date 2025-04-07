@@ -221,7 +221,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ServerDbCo
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<ServerDbContext>();
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
 
         return new ServerDbContext(optionsBuilder.Options);
     }
