@@ -73,7 +73,7 @@ namespace UniMate2.Repositories
 
             if (user.Images == null)
             {
-                user.Images = new List<UserImage>();
+                user.Images = [];
             }
 
             // Add new image
@@ -113,7 +113,7 @@ namespace UniMate2.Repositories
             var currentUser = await _userManager.FindByIdAsync(userId);
             if (currentUser == null)
             {
-                return new List<User>();
+                return [];
             }
 
             // Get users who are not friends and not pending friends
@@ -160,13 +160,17 @@ namespace UniMate2.Repositories
             return suggestions;
         }
 
-        public async Task<List<User>> SearchUsersAsync(string userId, string searchTerm, int count = 20)
+        public async Task<List<User>> SearchUsersAsync(
+            string userId,
+            string searchTerm,
+            int count = 20
+        )
         {
             // Get the current user
             var currentUser = await _userManager.FindByIdAsync(userId);
             if (currentUser == null || string.IsNullOrWhiteSpace(searchTerm))
             {
-                return new List<User>();
+                return [];
             }
 
             // Get IDs of users who already have a friendship connection
@@ -183,13 +187,15 @@ namespace UniMate2.Repositories
 
             // Search for users by name or email
             var searchTermLower = searchTerm.ToLower();
-            var users = await _userManager.Users
-                .Where(u => u.Id != userId)
+            var users = await _userManager
+                .Users.Where(u => u.Id != userId)
                 .Where(u => !friendRequestUserIds.Contains(u.Id))
                 .Where(u => !dislikedUserIds.Contains(u.Id))
-                .Where(u => u.Email.ToLower().Contains(searchTermLower) || 
-                            u.FirstName.ToLower().Contains(searchTermLower) || 
-                            u.LastName.ToLower().Contains(searchTermLower))
+                .Where(u =>
+                    (u.Email != null && u.Email.ToLower().Contains(searchTermLower))
+                    || (u.FirstName != null && u.FirstName.ToLower().Contains(searchTermLower))
+                    || (u.LastName != null && u.LastName.ToLower().Contains(searchTermLower))
+                )
                 .Take(count)
                 .ToListAsync();
 

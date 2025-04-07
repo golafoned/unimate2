@@ -144,7 +144,8 @@ namespace UniMate2.Controllers
                 _logger.LogWarning("User not found in database: {UserId}", userId);
                 return Challenge();
             }
-
+            currentUser.FirstName = updateUserDto.FirstName ?? currentUser.FirstName;
+            currentUser.LastName = updateUserDto.LastName ?? currentUser.LastName;
             currentUser.University = updateUserDto.University ?? currentUser.University;
             currentUser.Faculty = updateUserDto.Faculty ?? currentUser.Faculty;
 
@@ -187,6 +188,26 @@ namespace UniMate2.Controllers
                     DateTimeKind.Utc
                 );
                 currentUser.BirthDate = utcBirthDate;
+            }
+
+            // Handle image uploads if any
+            if (updateUserDto.ImageFiles != null && updateUserDto.ImageFiles.Count > 0)
+            {
+                foreach (var imageFile in updateUserDto.ImageFiles)
+                {
+                    if (imageFile.Length > 0)
+                    {
+                        var uploadResult = await ProcessImageUpload(imageFile, currentUser);
+                        if (!uploadResult)
+                        {
+                            // If one image fails, continue with the rest
+                            _logger.LogWarning(
+                                "Failed to upload image: {FileName}",
+                                imageFile.FileName
+                            );
+                        }
+                    }
+                }
             }
 
             var result = await _userRepository.UpdateUserAsync(currentUser);
@@ -635,6 +656,98 @@ namespace UniMate2.Controllers
                 return user.Images.OrderBy(i => i.SerialNumber).First().ImagePath;
             }
             return "/images/default-avatar.png"; // Default image path
+        }
+
+        // Helper method for processing image uploads
+        private async Task<bool> ProcessImageUpload(IFormFile imageFile, User currentUser)
+        {
+            try
+            {
+                if (imageFile == null || imageFile.Length == 0)
+                {
+                    return false;
+                }
+
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    _logger.LogWarning("Invalid file type: {FileType}", extension);
+                    return false;
+                }
+
+                if (imageFile.Length > 5 * 1024 * 1024) // 5MB limit
+                {
+                    _logger.LogWarning("File size exceeds limit: {FileSize}", imageFile.Length);
+                    return false;
+                }
+
+                // Get absolute web root path
+                var absoluteWebRootPath = _webHostEnvironment.WebRootPath;
+                if (string.IsNullOrEmpty(absoluteWebRootPath))
+                {
+                    _logger.LogWarning("WebRootPath is empty, using fallback path");
+                    absoluteWebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                }
+
+                // Create uploads directory if it doesn't exist
+                var uploadsDirectory = Path.Combine(absoluteWebRootPath, "uploads");
+                if (!Directory.Exists(uploadsDirectory))
+                {
+                    _logger.LogDebug("Creating directory: {UploadsDirectory}", uploadsDirectory);
+                    Directory.CreateDirectory(uploadsDirectory);
+                }
+
+                // Generate unique filename
+                var uniqueFileName =
+                    $"{DateTime.Now:yyyyMMddHHmmss}_{Guid.NewGuid().ToString().Substring(0, 8)}{extension}";
+                var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
+
+                _logger.LogDebug("Attempting to save file to: {FilePath}", filePath);
+
+                // Read all bytes and write directly
+                byte[] fileBytes;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+                    fileBytes = memoryStream.ToArray();
+                }
+
+                // Write file directly to disk
+                System.IO.File.WriteAllBytes(filePath, fileBytes);
+
+                // Verify file was saved correctly
+                if (!System.IO.File.Exists(filePath))
+                {
+                    _logger.LogError("File does not exist after saving: {FilePath}", filePath);
+                    return false;
+                }
+
+                // Initialize Images collection if needed
+                currentUser.Images ??= [];
+
+                // Add image to user
+                var userImage = new UserImage
+                {
+                    User = currentUser,
+                    ImagePath = $"/uploads/{uniqueFileName}",
+                    SerialNumber = currentUser.Images.Count,
+                };
+
+                currentUser.Images.Add(userImage);
+
+                _logger.LogInformation(
+                    "Image successfully processed: {ImagePath}",
+                    userImage.ImagePath
+                );
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing image upload: {ErrorMessage}", ex.Message);
+                return false;
+            }
         }
     }
 }

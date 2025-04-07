@@ -24,7 +24,7 @@ namespace UniMate2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Suggestions(string searchTerm = null, int count = 10)
+        public async Task<IActionResult> Suggestions(string searchTerm = "", int count = 10)
         {
             var currentUser = await _usersRepository.GetUserByEmailAsync(User.Identity!.Name!);
             if (currentUser == null)
@@ -33,10 +33,14 @@ namespace UniMate2.Controllers
             }
 
             List<User> suggestions;
-            
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                suggestions = await _usersRepository.SearchUsersAsync(currentUser.Id, searchTerm, count);
+                suggestions = await _usersRepository.SearchUsersAsync(
+                    currentUser.Id,
+                    searchTerm,
+                    count
+                );
             }
             else
             {
@@ -56,7 +60,7 @@ namespace UniMate2.Controllers
                         ProfilePicture = GetProfilePictureUrl(u),
                     }),
                 ],
-                SearchTerm = searchTerm
+                SearchTerm = searchTerm,
             };
 
             return View(viewModel);
@@ -97,8 +101,8 @@ namespace UniMate2.Controllers
                 Id = Guid.NewGuid(),
                 Sender = currentUser,
                 Receiver = receiverUser,
-                // Use DateTime.Now instead of DateTime.UtcNow to match PostgreSQL's timestamp without time zone
-                RequestDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
+                // PostgreSQL's timestamp with time zone column requires UTC datetime
+                RequestDate = DateTime.UtcNow,
                 Status = FriendRequestStatus.Pending,
             };
 

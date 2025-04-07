@@ -25,7 +25,7 @@ namespace UniMate2.Models.DTO
         [Required(ErrorMessage = "Faculty is required")]
         public string? Faculty { get; set; }
 
-        public List<string>? Languages { get; set; } = new List<string>();
+        public List<string>? Languages { get; set; } = [];
 
         [Required(ErrorMessage = "Smoking status is required")]
         public AddictionStatus? IsSmoking { get; set; }
@@ -41,7 +41,7 @@ namespace UniMate2.Models.DTO
         public string? Bio { get; set; }
 
         public ZodiakSign? ZodiakSign { get; set; }
-        public List<IFormFile>? ImageFiles { get; set; } = new List<IFormFile>();
+        public List<IFormFile>? ImageFiles { get; set; } = [];
 
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }

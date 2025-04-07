@@ -32,8 +32,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             }
         }
 
-        List<User> users = new List<User>
-        {
+        List<User> users =
+        [
             new User
             {
                 FirstName = "FirstName2",
@@ -142,7 +142,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 NormalizedUserName = "DAVID.MILLER@EXAMPLE.COM",
                 NormalizedEmail = "DAVID.MILLER@EXAMPLE.COM",
             },
-        };
+        ];
 
         var hasher = new PasswordHasher<User>();
 
@@ -151,8 +151,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             user.PasswordHash = new PasswordHasher<User>().HashPassword(user, "Password123!");
         });
 
-        List<Event> events = new List<Event>
-        {
+        List<Event> events =
+        [
             new Event
             {
                 Id = Guid.NewGuid(),
@@ -180,7 +180,7 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 EndDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10), DateTimeKind.Utc),
                 Location = "Tech Institute",
             },
-        };
+        ];
 
         modelBuilder.Entity<Event>().HasData(events);
         modelBuilder.Entity<User>().HasData(users);
