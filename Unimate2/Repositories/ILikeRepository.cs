@@ -15,5 +15,9 @@ namespace UniMate2.Repositories
         // New methods for the like/dislike log
         Task<List<Like>> GetUserLikesWithDetailsAsync(string userId);
         Task<List<Like>> GetLikesReceivedWithDetailsAsync(string userId);
+
+        Task<List<Like>> GetAllLikesWithDetailsAsync();
+        Task<int> GetTotalLikesCountAsync();
+        Task<bool> DeleteAsync(Guid likeId);
     }
 }

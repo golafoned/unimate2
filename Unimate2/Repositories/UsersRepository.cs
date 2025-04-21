@@ -201,5 +201,39 @@ namespace UniMate2.Repositories
 
             return users;
         }
+
+        public async Task<IdentityResult> DeleteUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+            }
+
+            // Delete user's images from storage if they exist
+            if (user.Images != null && user.Images.Any())
+            {
+                foreach (var image in user.Images)
+                {
+                    var imagePath = image.ImagePath;
+                    if (!string.IsNullOrEmpty(imagePath))
+                    {
+                        var fullPath = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot",
+                            imagePath.TrimStart('/')
+                        );
+
+                        if (File.Exists(fullPath))
+                        {
+                            File.Delete(fullPath);
+                        }
+                    }
+                }
+            }
+
+            // Delete user from database
+            return await _userManager.DeleteAsync(user);
+        }
     }
 }

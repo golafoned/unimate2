@@ -182,6 +182,30 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             },
         ];
 
+        var adminRoleId = Guid.NewGuid().ToString();
+        var adminRole = new IdentityRole
+        {
+            Id = adminRoleId,
+            Name = "Admin",
+            NormalizedName = "ADMIN",
+            ConcurrencyStamp = Guid.NewGuid().ToString(),
+        };
+
+        modelBuilder.Entity<IdentityRole>().HasData(adminRole);
+
+        var adminUserId = users[0].Id;
+        if (string.IsNullOrEmpty(adminUserId))
+        {
+            adminUserId = Guid.NewGuid().ToString();
+            users[0].Id = adminUserId;
+        }
+
+        // Create the user-role relationship
+        var userRole = new IdentityUserRole<string> { RoleId = adminRoleId, UserId = adminUserId };
+
+        // Seed the user-role relationship
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(userRole);
+
         modelBuilder.Entity<Event>().HasData(events);
         modelBuilder.Entity<User>().HasData(users);
 
@@ -208,21 +232,5 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
             .WithMany()
             .HasForeignKey(ud => ud.DislikedUserId)
             .OnDelete(DeleteBehavior.Restrict);
-    }
-}
-
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ServerDbContext>
-{
-    public ServerDbContext CreateDbContext(string[] args)
-    {
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        var optionsBuilder = new DbContextOptionsBuilder<ServerDbContext>();
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-
-        return new ServerDbContext(optionsBuilder.Options);
     }
 }

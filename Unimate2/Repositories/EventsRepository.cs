@@ -59,4 +59,24 @@ public class EventsRepository(ServerDbContext context) : IEventsRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<bool> UpdateEvent(Event updatedEvent)
+    {
+        var existingEvent = await _context.Events.FindAsync(updatedEvent.Id);
+        if (existingEvent == null)
+        {
+            return false;
+        }
+
+        // Update the properties
+        existingEvent.Title = updatedEvent.Title;
+        existingEvent.Description = updatedEvent.Description;
+        existingEvent.StartDate = DateTime.SpecifyKind(updatedEvent.StartDate, DateTimeKind.Utc);
+        existingEvent.EndDate = DateTime.SpecifyKind(updatedEvent.EndDate, DateTimeKind.Utc);
+        existingEvent.Location = updatedEvent.Location;
+
+        _context.Events.Update(existingEvent);
+        var saveResult = await _context.SaveChangesAsync();
+        return saveResult > 0;
+    }
 }

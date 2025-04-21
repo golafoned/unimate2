@@ -10,5 +10,7 @@ namespace UniMate2.Repositories
         Task AddAsync(FriendRequest friendRequest);
         Task UpdateAsync(FriendRequest friendRequest);
         Task DeleteAsync(FriendRequest friendRequest);
+        Task<List<FriendRequest>> GetAllFriendRequestsAsync();
+        Task<int> GetTotalFriendRequestsCountAsync();
     }
 }

@@ -1,0 +1,110 @@
+@model List<UniMate2.Models.Domain.FriendRequest>
+@using UniMate2.Models.Domain.Enums
+@{
+    ViewData["Title"] = "Manage Friend Requests";
+}
+
+<div class="container mt-4">
+    <h1>Manage Friend Requests</h1>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                <li>@TempData["ErrorMessage"]</li>
+            </ul>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Status</th>
+                            <th>Request Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("ViewProfile", "Users", new { id = request.Sender.Id })">
+                                        @request.Sender.FirstName @request.Sender.LastName
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("ViewProfile", "Users", new { id = request.Receiver.Id })">
+                                        @request.Receiver.FirstName @request.Receiver.LastName
+                                    </a>
+                                </td>
+                                <td>
+                                    @if (request.Status == FriendRequestStatus.Pending)
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (request.Status == FriendRequestStatus.Accepted)
+                                    {
+                                        <span class="badge bg-success">Accepted</span>
+                                    }
+                                    else if (request.Status == FriendRequestStatus.Declined)
+                                    {
+                                        <span class="badge bg-danger">Declined</span>
+                                    }
+                                </td>
+                                <td>@request.RequestDate.ToString("g")</td>
+                                <td>
+                                    @if (request.Status == FriendRequestStatus.Pending)
+                                    {
+                                        <form asp-action="UpdateFriendRequestStatus" method="post" class="d-inline-block">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="requestId" value="@request.Id" />
+                                            <input type="hidden" name="status" value="accept" />
+                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                        </form>
+                                        <form asp-action="UpdateFriendRequestStatus" method="post" class="d-inline-block ms-1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="requestId" value="@request.Id" />
+                                            <input type="hidden" name="status" value="decline" />
+                                            <button type="submit" class="btn btn-warning btn-sm">Decline</button>
+                                        </form>
+                                    }
+                                    <form asp-action="UpdateFriendRequestStatus" method="post" class="d-inline-block ms-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="requestId" value="@request.Id" />
+                                        <input type="hidden" name="status" value="delete" />
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this friend request?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            @if (!Model.Any())
+            {
+                <p class="text-center text-muted">No friend requests found in the system.</p>
+            }
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <a asp-action="Dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>

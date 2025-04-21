@@ -1,0 +1,185 @@
+@model UniMate2.Models.ViewModels.Admin.EditUserViewModel
+@using UniMate2.Models.Domain.Enums
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container mt-4">
+    <h1>Edit User: @Model.User.FirstName @Model.User.LastName</h1>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                <li>@TempData["ErrorMessage"]</li>
+            </ul>
+        </div>
+    }
+    
+    <form asp-action="UpdateUser" asp-route-id="@Model.User.Id" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        User Information
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="Email" value="@Model.User.Email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="FirstName" value="@Model.User.FirstName" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" name="LastName" value="@Model.User.LastName" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">University</label>
+                            <input type="text" class="form-control" name="University" value="@Model.User.University" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Faculty</label>
+                            <input type="text" class="form-control" name="Faculty" value="@Model.User.Faculty" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Personal Information
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" name="Gender">
+                                @foreach (var gender in Enum.GetValues<Gender>())
+                                {
+                                    <option value="@((int)gender)" selected="@(Model.User.Gender == gender)">@gender</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Orientation</label>
+                            <select class="form-select" name="Orientation">
+                                @foreach (var orientation in Enum.GetValues<Orientation>())
+                                {
+                                    <option value="@((int)orientation)" selected="@(Model.User.Orientation == orientation)">@orientation</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Smoking</label>
+                            <select class="form-select" name="IsSmoking">
+                                @foreach (var status in Enum.GetValues<AddictionStatus>())
+                                {
+                                    <option value="@((int)status)" selected="@(Model.User.IsSmoking == status)">@status</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Drinking</label>
+                            <select class="form-select" name="IsDrinking">
+                                @foreach (var status in Enum.GetValues<AddictionStatus>())
+                                {
+                                    <option value="@((int)status)" selected="@(Model.User.IsDrinking == status)">@status</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Looking For</label>
+                            <select class="form-select" name="LookingFor">
+                                @foreach (var lookingFor in Enum.GetValues<LookingForEnum>())
+                                {
+                                    <option value="@((int)lookingFor)" selected="@(Model.User.LookingFor == lookingFor)">@lookingFor</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea class="form-control" name="Bio" rows="3">@Model.User.Bio</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        User Roles
+                    </div>
+                    <div class="card-body">
+                        @foreach (var role in Model.AllRoles)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="selectedRoles" value="@role" id="role-@role" @(Model.UserRoles.Contains(role) ? "checked" : "") />
+                                <label class="form-check-label" for="role-@role">
+                                    @role
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        User Images
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @if (Model.User.Images != null && Model.User.Images.Any())
+                            {
+                                foreach (var image in Model.User.Images)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card">
+                                            <img src="@image.ImagePath" class="card-img-top" alt="User image" style="height: 200px; object-fit: cover;">
+                                            <div class="card-body">
+                                                <form asp-action="DeleteUserImage" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="imageId" value="@image.Id" />
+                                                    <button type="submit" class="btn btn-danger btn-sm w-100" 
+                                                            onclick="return confirm('Are you sure you want to delete this image?')">
+                                                        Delete Image
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-12">
+                                    <p class="text-muted">No images uploaded.</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-4">
+            <button type="submit" class="btn btn-primary">Update User</button>
+            <a asp-action="Users" class="btn btn-secondary">Back to List</a>
+            <form asp-action="DeleteUser" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="userId" value="@Model.User.Id" />
+                <button type="submit" class="btn btn-danger" 
+                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                    Delete User
+                </button>
+            </form>
+        </div>
+    </form>
+</div>

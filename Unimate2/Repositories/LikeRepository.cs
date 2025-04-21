@@ -105,5 +105,28 @@ namespace UniMate2.Repositories
             await AddAsync(like);
             return true;
         }
+
+        public async Task<List<Like>> GetAllLikesWithDetailsAsync()
+        {
+            return await _context.Likes.Include(l => l.Liker).Include(l => l.Liked).ToListAsync();
+        }
+
+        public async Task<int> GetTotalLikesCountAsync()
+        {
+            return await _context.Likes.CountAsync();
+        }
+
+        public async Task<bool> DeleteAsync(Guid likeId)
+        {
+            var like = await _context.Likes.FindAsync(likeId);
+            if (like == null)
+            {
+                return false;
+            }
+
+            _context.Likes.Remove(like);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
+        }
     }
 }

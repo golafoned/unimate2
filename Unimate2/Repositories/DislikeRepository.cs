@@ -108,5 +108,31 @@ namespace UniMate2.Repositories
                 .OrderByDescending(d => d.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task<List<UserDislike>> GetAllDislikesWithDetailsAsync()
+        {
+            return await _context
+                .UserDislikes.Include(d => d.DislikingUser)
+                .Include(d => d.DislikedUser)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalDislikesCountAsync()
+        {
+            return await _context.UserDislikes.CountAsync();
+        }
+
+        public async Task<bool> DeleteAsync(Guid dislikeId)
+        {
+            var dislike = await _context.UserDislikes.FindAsync(dislikeId);
+            if (dislike == null)
+            {
+                return false;
+            }
+
+            _context.UserDislikes.Remove(dislike);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
+        }
     }
 }

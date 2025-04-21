@@ -10,4 +10,5 @@ public interface IEventsRepository
     Task<Event?> GetEventById(Guid id);
     Task<Event> AddEvent(EventDto eventDto);
     Task<bool> DeleteEvent(Guid id);
+    Task<bool> UpdateEvent(Event updatedEvent);
 }

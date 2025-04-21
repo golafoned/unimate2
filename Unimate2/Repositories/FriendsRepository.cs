@@ -48,4 +48,17 @@ public class FriendsRepository(ServerDbContext context) : IFriendsRepository
             .Include(fr => fr.Receiver)
             .ToListAsync();
     }
+
+    public async Task<List<FriendRequest>> GetAllFriendRequestsAsync()
+    {
+        return await _context
+            .FriendRequests.Include(fr => fr.Sender)
+            .Include(fr => fr.Receiver)
+            .ToListAsync();
+    }
+
+    public async Task<int> GetTotalFriendRequestsCountAsync()
+    {
+        return await _context.FriendRequests.CountAsync();
+    }
 }
