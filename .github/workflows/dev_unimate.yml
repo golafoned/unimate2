@@ -23,7 +23,7 @@ jobs:
               with:
                   dotnet-version: "8.x"
             - name: Get current path
-              run: ls
+              run: cd Unimate2 && ls
 
             - name: Build with dotnet
               run: dotnet build Unimate2/Unimate2.csproj --configuration Release
