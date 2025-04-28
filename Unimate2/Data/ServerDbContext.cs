@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using UniMate2.Models.Domain;
+using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 
 namespace UniMate2.Data;
@@ -16,6 +17,10 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
     public DbSet<UserImage> UserImages { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<UserDislike> UserDislikes { get; set; }
+    public DbSet<AbuseReport> AbuseReports { get; set; }
+    public string ReporterId { get; set; }
+    public string ReportedUserId { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +36,30 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 }
             }
         }
+        modelBuilder.Entity<AbuseReport>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.ReporterId)
+                .IsRequired()
+                .HasColumnType("text");
+
+            entity.Property(a => a.ReportedUserId)
+                .IsRequired()
+                .HasColumnType("text");
+
+            entity.HasOne(a => a.ReportingUser)
+                .WithMany()
+                .HasForeignKey(a => a.ReporterId)
+                .HasPrincipalKey(u => u.Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(a => a.ReportedUser)
+                .WithMany()
+                .HasForeignKey(a => a.ReportedUserId)
+                .HasPrincipalKey(u => u.Id)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         List<User> users =
         [

@@ -100,6 +100,15 @@
                             <p class="mb-0">@(Model.Bio ?? "N/A")</p>
                         </li>
                     </ul>
+                    <form asp-action="ReportAbuse" asp-controller="Users" method="post" class="mt-4">
+                        <input type="hidden" name="reportedUserId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason for Report</label>
+                            <input type="text" id="reason" name="reason" placeholder="Enter reason" required class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-danger">Report Abuse</button>
+                    </form>
+
                 </div>
             </div>
         </div>

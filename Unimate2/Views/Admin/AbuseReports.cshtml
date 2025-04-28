@@ -1,0 +1,42 @@
+﻿@model IEnumerable<UniMate2.Models.Domain.AbuseReport>
+
+@{
+    ViewData["Title"] = "Abuse Reports";
+}
+
+<h1>Abuse Reports</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Reporter</th>
+            <th>Reported User</th>
+            <th>Reason</th>
+            <th>Created At</th>
+            <th>Actions</th> <!-- нова колонка -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var report in Model)
+        {
+            <tr>
+                <td>@report.Id</td>
+                <td>@report.ReportingUser?.UserName ?? @report.ReporterId.ToString()</td>
+                <td>@report.ReportedUser?.UserName ?? @report.ReportedUserId.ToString()</td>
+                <td>@report.Reason</td>
+                <td>@report.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <form asp-action="DeleteAbuseReport" method="post" style="display:inline;">
+                        <input type="hidden" name="reportId" value="@report.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete Report</button>
+                    </form>
+                    <form asp-action="BanUser" method="post" style="display:inline; margin-left:5px;">
+                        <input type="hidden" name="userId" value="@report.ReportedUserId" />
+                        <button type="submit" class="btn btn-warning btn-sm">Ban User</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

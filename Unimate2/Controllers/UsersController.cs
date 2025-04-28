@@ -1,12 +1,17 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UniMate2.Models.Domain;
+using UniMate2.Data;
 using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 using UniMate2.Models.DTO;
 using UniMate2.Models.ViewModels;
 using UniMate2.Repositories;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace UniMate2.Controllers
 {
@@ -19,6 +24,7 @@ namespace UniMate2.Controllers
         private readonly IFriendsRepository _friendsRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly IDislikeRepository _dislikeRepository;
+        private readonly ServerDbContext _context;
 
         public UsersController(
             IUsersRepository userRepository,
@@ -27,7 +33,8 @@ namespace UniMate2.Controllers
             ILogger<UsersController> logger,
             IFriendsRepository friendsRepository,
             ILikeRepository likeRepository,
-            IDislikeRepository dislikeRepository
+            IDislikeRepository dislikeRepository,
+            ServerDbContext context
         )
         {
             _userRepository = userRepository;
@@ -38,6 +45,7 @@ namespace UniMate2.Controllers
             _likeRepository = likeRepository;
             _dislikeRepository = dislikeRepository;
             _logger.LogInformation("UsersController initialized");
+            _context = context;
         }
 
         [Authorize]
@@ -740,5 +748,25 @@ namespace UniMate2.Controllers
                 return false;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> ReportAbuse(string reportedUserId, string reason)
+        {
+            var reporterId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Створити репорт
+            var report = new AbuseReport
+            {
+                ReporterId =reporterId,
+                ReportedUserId = reportedUserId,
+                Reason = reason,
+            };
+
+            _context.AbuseReports.Add(report);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Suggestions", "Users"); // або куди там треба
+
+        }
+
     }
 }

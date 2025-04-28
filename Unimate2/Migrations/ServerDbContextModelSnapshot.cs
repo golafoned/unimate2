@@ -8,7 +8,7 @@ using UniMate2.Data;
 
 #nullable disable
 
-namespace UniMate2.Migrations
+namespace Unimate2.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
     partial class ServerDbContextModelSnapshot : ModelSnapshot
@@ -50,8 +50,8 @@ namespace UniMate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3643a046-459f-46a6-838d-738dc4cbf277",
-                            ConcurrencyStamp = "8f692274-5fec-4b59-90e3-dedf6eeed96f",
+                            Id = "744c2bf2-b115-4119-bbda-88c83472baa2",
+                            ConcurrencyStamp = "5698b40d-6aa2-4e70-ba6f-fba48c451a01",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -146,8 +146,8 @@ namespace UniMate2.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "3bbc34e7-c6c8-44f8-89c4-a3bf868ab947",
-                            RoleId = "3643a046-459f-46a6-838d-738dc4cbf277"
+                            UserId = "dc647b87-999f-42ce-a7aa-7de4b535e137",
+                            RoleId = "744c2bf2-b115-4119-bbda-88c83472baa2"
                         });
                 });
 
@@ -168,6 +168,36 @@ namespace UniMate2.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("UniMate2.Models.Domain.AbuseReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReportedUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReporterId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReportedUserId");
+
+                    b.HasIndex("ReporterId");
+
+                    b.ToTable("AbuseReports");
                 });
 
             modelBuilder.Entity("UniMate2.Models.Domain.Event", b =>
@@ -201,7 +231,7 @@ namespace UniMate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fc334df7-46ad-47ba-9f53-f854d7e122a5"),
+                            Id = new Guid("d02c43fb-b132-4911-b55b-9ffe0c73d768"),
                             Description = "A meetup for community members.",
                             EndDate = new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "City Park",
@@ -210,7 +240,7 @@ namespace UniMate2.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bc1ff33a-c3e2-431e-8987-5dab9101ff83"),
+                            Id = new Guid("225abbaf-b65d-449c-8eba-f4a7aa1a3deb"),
                             Description = "Annual technology conference.",
                             EndDate = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "Convention Center",
@@ -219,7 +249,7 @@ namespace UniMate2.Migrations
                         },
                         new
                         {
-                            Id = new Guid("74fcfc6e-9ba5-4369-88b8-106cf564d62e"),
+                            Id = new Guid("315df11c-8e17-4f19-991f-dfdc2bcb40a5"),
                             Description = "Workshop on emerging technologies.",
                             EndDate = new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "Tech Institute",
@@ -315,6 +345,9 @@ namespace UniMate2.Migrations
                     b.Property<int?>("Gender")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("IsDrinking")
                         .HasColumnType("integer");
 
@@ -391,16 +424,17 @@ namespace UniMate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3bbc34e7-c6c8-44f8-89c4-a3bf868ab947",
+                            Id = "dc647b87-999f-42ce-a7aa-7de4b535e137",
                             AccessFailedCount = 0,
                             Bio = "Bio5",
                             BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "38c36644-5f05-4f35-a645-81ac9bab7b3e",
+                            ConcurrencyStamp = "8ecdb065-fa3b-4d12-97a6-a4794e8dc429",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             Faculty = "Faculty2",
                             FirstName = "FirstName2",
                             Gender = 2,
+                            IsBanned = false,
                             IsDrinking = 0,
                             IsSmoking = 1,
                             LastName = "LastName2",
@@ -409,25 +443,26 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEKenkP84n8FLHhy39oFvyVzKjPd0RSI5aYABqyGavhVqSOWfGQxLW7CnnOGRMutclw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFTV/fyVQc49i6Rf/7ZMrS+jhWkokhCDDK/zhMOtvxZJ54RkK1yF0oChQ0p38njUMQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7a067d8c-bc4d-43d6-80c0-8fe20b3cc14f",
+                            SecurityStamp = "ceb8685d-82e6-428a-a12d-6fda6c883619",
                             TwoFactorEnabled = false,
                             University = "University1",
                             UserName = "user1@example.com"
                         },
                         new
                         {
-                            Id = "7c85ea6a-1ed9-4437-b735-8551cbae6034",
+                            Id = "3a16468a-e854-4b18-bc2e-370ee63d7b69",
                             AccessFailedCount = 0,
                             Bio = "Bio2",
                             BirthDate = new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "248f3cac-c84f-4b0f-a449-be5df5ea68b4",
+                            ConcurrencyStamp = "0d346bc2-9f25-4526-b0b0-b35c7d34bac6",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             Faculty = "Faculty2",
                             FirstName = "FirstName2",
                             Gender = 0,
+                            IsBanned = false,
                             IsDrinking = 0,
                             IsSmoking = 1,
                             LastName = "LastName2",
@@ -436,25 +471,26 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEPPOyIRaLnKuXbXP0+GKASrE9LgecUjDKh8jXkczM29+J9Cioj1PtyZYiiHf4THMxg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEH7E4QuZWHu65vCQzanMLwKQDG92E/duU4US0QNtMz2gM00/q0no8W9deBbx2eiGA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "49c00609-c87b-4891-8d9d-1899db1f98e3",
+                            SecurityStamp = "bf2c7473-99ec-4e84-9fd8-9861cbcd48cc",
                             TwoFactorEnabled = false,
                             University = "University2",
                             UserName = "user2@example.com"
                         },
                         new
                         {
-                            Id = "f4441b9d-7694-41d0-b0d7-501763861744",
+                            Id = "81f9e3a8-b73c-4354-80af-a58dffb856d8",
                             AccessFailedCount = 0,
                             Bio = "Loves hiking and outdoor adventures.",
                             BirthDate = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "7c18af45-5d5f-4a88-a49c-677dc3771689",
+                            ConcurrencyStamp = "903ebe95-b644-450f-9643-2f35371cdb68",
                             Email = "alice.johnson@example.com",
                             EmailConfirmed = false,
                             Faculty = "Engineering",
                             FirstName = "Alice",
                             Gender = 1,
+                            IsBanned = false,
                             IsDrinking = 2,
                             IsSmoking = 1,
                             LastName = "Johnson",
@@ -463,25 +499,26 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "ALICE.JOHNSON@EXAMPLE.COM",
                             NormalizedUserName = "ALICE.JOHNSON@EXAMPLE.COM",
                             Orientation = 2,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJN0BzpLbCIr+xIIEHongs9SZSRymfjYeGMMWtRyMXEP1R475SiucvLmx9ecz5OC+Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAkG6+S9vmbJweRFCPhQRYZ3Sp3ASHDGquwdI9vqG8YwKK9yQF+72/qiaCuXLGNOng==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dd26650b-cd51-442e-8ad5-013d14b7d77b",
+                            SecurityStamp = "b1a36fa4-dbf0-4f74-9cc2-ec2ccdfdb711",
                             TwoFactorEnabled = false,
                             University = "Tech University",
                             UserName = "alice.johnson@example.com"
                         },
                         new
                         {
-                            Id = "1233ba35-6311-48e1-9645-351abd152bdb",
+                            Id = "06754d4b-c490-4f86-90c5-ee8b0d7afb14",
                             AccessFailedCount = 0,
                             Bio = "Enjoys cooking and traveling.",
                             BirthDate = new DateTime(1988, 8, 22, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "e6d9c540-8242-4dfc-97f7-e3918b77a9c8",
+                            ConcurrencyStamp = "05257860-2011-4665-883a-b3dc63126277",
                             Email = "bob.smith@example.com",
                             EmailConfirmed = false,
                             Faculty = "Business",
                             FirstName = "Bob",
                             Gender = 0,
+                            IsBanned = false,
                             IsDrinking = 0,
                             IsSmoking = 0,
                             LastName = "Smith",
@@ -490,25 +527,26 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "BOB.SMITH@EXAMPLE.COM",
                             NormalizedUserName = "BOB.SMITH@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEFityDIiCTU/wNnilnY+F45x5YUcOayZOK9Nz0RlvGJh8NFsfdL1nsub0WJVuSHBSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJ+W6twiSxPXbHRE92rjRMJBfDPrU9Oi2R4u0KeR/4z1GlziBWFb4RXFlXMvavFfyQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2139ba3a-9228-4921-9085-e6897e535cd6",
+                            SecurityStamp = "70c2b0cf-7985-4d43-9423-24869e491c64",
                             TwoFactorEnabled = false,
                             University = "State University",
                             UserName = "bob.smith@example.com"
                         },
                         new
                         {
-                            Id = "35ff0e5f-3fd9-4977-98a0-4fbc716f8313",
+                            Id = "8a533b3e-50a5-45b9-aad4-b1a14e1bd531",
                             AccessFailedCount = 0,
                             Bio = "Passionate about graphic design and photography.",
                             BirthDate = new DateTime(1992, 3, 30, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "e3034297-1f72-45fe-a1e0-1ed28aaadcc8",
+                            ConcurrencyStamp = "e447feac-cf2f-4154-a697-4e4641d5ca2d",
                             Email = "carol.davis@example.com",
                             EmailConfirmed = false,
                             Faculty = "Design",
                             FirstName = "Carol",
                             Gender = 0,
+                            IsBanned = false,
                             IsDrinking = 1,
                             IsSmoking = 2,
                             LastName = "Davis",
@@ -517,25 +555,26 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "CAROL.DAVIS@EXAMPLE.COM",
                             NormalizedUserName = "CAROL.DAVIS@EXAMPLE.COM",
                             Orientation = 3,
-                            PasswordHash = "AQAAAAIAAYagAAAAECAOWAAPDtjGl/EXb7dqI0/mf35BnRRo2Am7asCJx29XNxRp/YkrW43K/8/wnRJCWQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP9tSaXISQRSG67nU/u2Zp2RVeglF4C7xXobG8DhER+8KeL0CJX8cO9vT7d1Bzd3dg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dbd28950-fe1c-46a4-86f2-98dedde86eff",
+                            SecurityStamp = "a4bf3440-9b29-4c12-95db-ca5c1add5462",
                             TwoFactorEnabled = false,
                             University = "Arts College",
                             UserName = "carol.davis@example.com"
                         },
                         new
                         {
-                            Id = "e53fb681-c573-4108-84bb-389803cce4b4",
+                            Id = "6faed1c6-ddf0-4935-a0ee-69bba14ac866",
                             AccessFailedCount = 0,
                             Bio = "Avid cyclist and technology enthusiast.",
                             BirthDate = new DateTime(1990, 7, 19, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "73a1f1b9-39ae-43b3-926e-39c8b4f3c24f",
+                            ConcurrencyStamp = "a02a1bca-f07e-4466-b66d-64748311eb81",
                             Email = "david.miller@example.com",
                             EmailConfirmed = false,
                             Faculty = "Mechanical",
                             FirstName = "David",
                             Gender = 0,
+                            IsBanned = false,
                             IsDrinking = 0,
                             IsSmoking = 1,
                             LastName = "Miller",
@@ -544,9 +583,9 @@ namespace UniMate2.Migrations
                             NormalizedEmail = "DAVID.MILLER@EXAMPLE.COM",
                             NormalizedUserName = "DAVID.MILLER@EXAMPLE.COM",
                             Orientation = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEP+xlJtHQEsYoN1vu8V8Jzvj7h75+AmA+r6YDsUuHCqiQLNNNvArviz7q10cHOP+sA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJT5tMDNjW6i1uq/Ox1Oc/kULcudQKM6ifQhkI3XXiltn40tH512CSvo4xXLynHM0g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d6c15cc9-cf33-4b65-b058-74e207354a18",
+                            SecurityStamp = "c8643f05-4055-437b-b51e-c501cb1c7ad6",
                             TwoFactorEnabled = false,
                             University = "Engineering Institute",
                             UserName = "david.miller@example.com"
@@ -651,6 +690,25 @@ namespace UniMate2.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UniMate2.Models.Domain.AbuseReport", b =>
+                {
+                    b.HasOne("UniMate2.Models.Domain.User", "ReportedUser")
+                        .WithMany()
+                        .HasForeignKey("ReportedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UniMate2.Models.Domain.User", "ReportingUser")
+                        .WithMany()
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ReportedUser");
+
+                    b.Navigation("ReportingUser");
                 });
 
             modelBuilder.Entity("UniMate2.Models.Domain.FriendRequest", b =>

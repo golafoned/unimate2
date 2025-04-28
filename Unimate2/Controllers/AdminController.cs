@@ -1,9 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using UniMate2.Data;
 using UniMate2.Models.Domain;
 using UniMate2.Models.ViewModels.Admin;
 using UniMate2.Repositories;
+
 
 namespace UniMate2.Controllers
 {
@@ -18,6 +22,8 @@ namespace UniMate2.Controllers
         private readonly IFriendsRepository _friendsRepository;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ServerDbContext _context;
+
 
         public AdminController(
             IUsersRepository usersRepository,
@@ -27,7 +33,8 @@ namespace UniMate2.Controllers
             IDislikeRepository dislikeRepository,
             IFriendsRepository friendsRepository,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager
+            RoleManager<IdentityRole> roleManager,
+            ServerDbContext context
         )
         {
             _usersRepository = usersRepository;
@@ -38,6 +45,7 @@ namespace UniMate2.Controllers
             _friendsRepository = friendsRepository;
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         // GET: Admin/Dashboard
@@ -516,5 +524,51 @@ namespace UniMate2.Controllers
             TempData["SuccessMessage"] = "User image deleted successfully.";
             return RedirectToAction(nameof(UserImages));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AbuseReports()
+        {
+            var reports = await _context.AbuseReports.ToListAsync();
+            return View(reports);
+        }
+        // Видалення скарги
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAbuseReport(Guid reportId)
+        {
+            var report = await _context.AbuseReports.FindAsync(reportId);
+            if (report != null)
+            {
+                _context.AbuseReports.Remove(report);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Report deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Report not found.";
+            }
+            return RedirectToAction("AbuseReports");
+        }
+
+        // Бан користувача
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BanUser(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                user.IsBanned = true; // Переконайся що в User є поле IsBanned (bool)
+                await _userManager.UpdateAsync(user);
+                TempData["SuccessMessage"] = "User banned successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "User not found.";
+            }
+            return RedirectToAction("AbuseReports");
+
+        }
+
     }
 }

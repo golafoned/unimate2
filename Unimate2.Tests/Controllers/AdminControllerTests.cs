@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UniMate2.Controllers;
+using UniMate2.Data;
 using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 using UniMate2.Models.ViewModels.Admin;
@@ -25,6 +26,8 @@ namespace UniMate2.Tests.Controllers
         private readonly Mock<UserManager<User>> _mockUserManager;
         private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly AdminController _controller;
+        private readonly Mock<ServerDbContext> _mockContext;
+
 
         public AdminControllerTests()
         {
@@ -35,6 +38,7 @@ namespace UniMate2.Tests.Controllers
             _mockDislikeRepository = new Mock<IDislikeRepository>();
             _mockFriendsRepository = new Mock<IFriendsRepository>();
             _mockUserManager = UserManagerMock.CreateMock();
+            _mockContext = new Mock<ServerDbContext>();
             _mockRoleManager = new Mock<RoleManager<IdentityRole>>(
                 Mock.Of<IRoleStore<IdentityRole>>(),
                 null,
@@ -51,7 +55,8 @@ namespace UniMate2.Tests.Controllers
                 _mockDislikeRepository.Object,
                 _mockFriendsRepository.Object,
                 _mockUserManager.Object,
-                _mockRoleManager.Object
+                _mockRoleManager.Object,
+                _mockContext.Object
             );
 
             // Initialize TempData for the controller to prevent NullReferenceException
