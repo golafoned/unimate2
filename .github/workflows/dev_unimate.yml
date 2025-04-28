@@ -27,10 +27,10 @@ jobs:
               run: dotnet tool install --global dotnet-ef --version 8.0.8 # Match your EF Core version
 
             - name: Restore dependencies
-              run: dotnet restore UniMate2.sln # Specify the solution file
+              run: dotnet restore unimate2.sln # Specify the solution file
 
             - name: Build with dotnet
-              run: dotnet build Unimate2.sln --configuration Release --no-restore
+              run: dotnet build unimate2.sln --configuration Release --no-restore
 
             - name: Run tests
               run: dotnet test Unimate2.Tests/Unimate2.Tests.csproj --no-build --verbosity normal
