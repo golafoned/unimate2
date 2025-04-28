@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - unimate
+name: Build and deploy ASP.NET Core app to Azure Web App - unimate
 
 on:
     push:
@@ -13,7 +13,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            contents: read #This is required for actions/checkout
+            contents: read # Required for actions/checkout
 
         steps:
             - uses: actions/checkout@v4
@@ -21,16 +21,25 @@ jobs:
             - name: Set up .NET Core
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: "8.x"
+                  dotnet-version: "8.0.x" # Specify .NET 8.0.x for compatibility
+
+            - name: Install EF Core CLI
+              run: dotnet tool install --global dotnet-ef --version 8.0.8 # Match your EF Core version
 
             - name: Restore dependencies
-              run: dotnet restore
+              run: dotnet restore Unimate2.sln # Specify the solution file
 
             - name: Build with dotnet
-              run: dotnet build --configuration Release --no-restore
+              run: dotnet build Unimate2.sln --configuration Release --no-restore
 
             - name: Run tests
               run: dotnet test Unimate2.Tests/Unimate2.Tests.csproj --no-build --verbosity normal
+
+            - name: Update database
+              env:
+                  CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+              run: dotnet ef database update --project Unimate2/Unimate2.csproj
+              working-directory: Unimate2 # Ensure correct folder for EF migrations
 
             - name: Publish Unimate2
               run: dotnet publish Unimate2/Unimate2.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -48,8 +57,7 @@ jobs:
             name: "Production"
             url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
         permissions:
-            id-token: write #This is required for requesting the JWT
-            contents: read #This is required for actions/checkout
+            contents: read # Required for actions/checkout
 
         steps:
             - name: Download artifact from build job
@@ -57,17 +65,11 @@ jobs:
               with:
                   name: .net-app
 
-            - name: Login to Azure
-              uses: azure/login@v2
-              with:
-                  client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_56A37CF047D446D4AF6688E824F4516D }}
-                  tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DD3A399CE3924E7589C6C7144B20A9C7 }}
-                  subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ED4A396547A8454499AC8C865D2DD395 }}
-
             - name: Deploy to Azure Web App
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v3
               with:
-                  app-name: "unimate"
+                  app-name: "unimate" # Your Azure App Service name
                   slot-name: "Production"
                   package: .
+                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }} # Use publish profile secret
