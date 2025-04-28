@@ -10,10 +10,14 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            contents: read # Required for actions/checkout
+            contents: read
 
         steps:
             - uses: actions/checkout@v4
+
+            - name: List directory structure
+              run: ls -R
+              working-directory: ./
 
             - name: Set up .NET Core
               uses: actions/setup-dotnet@v4
@@ -21,16 +25,18 @@ jobs:
                   dotnet-version: "8.x"
 
             - name: Restore dependencies
-              run: dotnet restore unimate2.sln # Explicitly specify the solution file
-              working-directory: ./ # Ensure the command runs in the repository root
+              run: |
+                  dotnet restore Unimate2/Unimate2.csproj
+                  dotnet restore Unimate2.Tests/Unimate2.Tests.csproj
+              working-directory: ./
 
             - name: Build with dotnet
               run: dotnet build Unimate2/Unimate2.csproj --configuration Release --no-restore
-              working-directory: ./ # Ensure the command runs in the repository root
+              working-directory: ./
 
             - name: Publish Unimate2
               run: dotnet publish Unimate2/Unimate2.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
-              working-directory: ./ # Ensure the command runs in the repository root
+              working-directory: ./
 
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v4
@@ -45,8 +51,8 @@ jobs:
             name: "Production"
             url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
         permissions:
-            id-token: write # Required for requesting the JWT
-            contents: read # Required for actions/checkout
+            id-token: write
+            contents: read
 
         steps:
             - name: Download artifact from build job
