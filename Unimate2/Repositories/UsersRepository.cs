@@ -235,5 +235,45 @@ namespace UniMate2.Repositories
             // Delete user from database
             return await _userManager.DeleteAsync(user);
         }
+
+        public async Task<List<User>> GetUsersOrderedByLikesReceivedAsync()
+        {
+            var users = await _context.Users.Include(u => u.Images).ToListAsync();
+            var likesCount = await GetUserLikesReceivedCountAsync();
+
+            return users
+                .OrderByDescending(u => likesCount.ContainsKey(u.Id) ? likesCount[u.Id] : 0)
+                .ToList();
+        }
+
+        public async Task<List<User>> GetUsersOrderedByLikesGivenAsync()
+        {
+            var users = await _context.Users.Include(u => u.Images).ToListAsync();
+            var likesCount = await GetUserLikesGivenCountAsync();
+
+            return users
+                .OrderByDescending(u => likesCount.ContainsKey(u.Id) ? likesCount[u.Id] : 0)
+                .ToList();
+        }
+
+        public async Task<Dictionary<string, int>> GetUserLikesReceivedCountAsync()
+        {
+            var likesReceived = await _context
+                .Likes.GroupBy(l => l.LikedId)
+                .Select(g => new { UserId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.UserId, x => x.Count);
+
+            return likesReceived;
+        }
+
+        public async Task<Dictionary<string, int>> GetUserLikesGivenCountAsync()
+        {
+            var likesGiven = await _context
+                .Likes.GroupBy(l => l.LikerId)
+                .Select(g => new { UserId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.UserId, x => x.Count);
+
+            return likesGiven;
+        }
     }
 }

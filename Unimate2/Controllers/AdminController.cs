@@ -56,10 +56,37 @@ namespace UniMate2.Controllers
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> Users(string sortOrder = "none")
         {
-            var users = await _usersRepository.GetAllUsersAsync();
-            return View(users);
+            List<User> users;
+            var viewModel = new UsersViewModel { SortOrder = sortOrder };
+
+            switch (sortOrder)
+            {
+                case "likesReceived":
+                    users = await _usersRepository.GetUsersOrderedByLikesReceivedAsync();
+                    viewModel.LikesReceived =
+                        await _usersRepository.GetUserLikesReceivedCountAsync();
+                    break;
+                case "likesGiven":
+                    users = await _usersRepository.GetUsersOrderedByLikesGivenAsync();
+                    viewModel.LikesGiven = await _usersRepository.GetUserLikesGivenCountAsync();
+                    break;
+                default:
+                    users = await _usersRepository.GetAllUsersAsync();
+                    break;
+            }
+
+            viewModel.Users = users;
+
+            // If we're sorting by likes, make sure we have the counts for display
+            if (sortOrder == "none")
+            {
+                viewModel.LikesReceived = await _usersRepository.GetUserLikesReceivedCountAsync();
+                viewModel.LikesGiven = await _usersRepository.GetUserLikesGivenCountAsync();
+            }
+
+            return View(viewModel);
         }
 
         // GET: Admin/EditUser
