@@ -25,9 +25,7 @@ jobs:
                   dotnet-version: "8.x"
 
             - name: Restore dependencies
-              run: |
-                  dotnet restore Unimate2/Unimate2.csproj
-                  dotnet restore Unimate2.Tests/Unimate2.Tests.csproj
+              run: dotnet restore Unimate2/Unimate2.csproj
               working-directory: ./
 
             - name: Build with dotnet
