@@ -135,6 +135,63 @@ namespace UniMate2.Tests.Controllers
         }
 
         [Fact]
+        public async Task Users_ReturnsViewWithUsersList_WithoutSorting()
+        {
+            // Arrange
+            var users = new List<User> { new User(), new User() };
+            _mockUsersRepository.Setup(x => x.GetAllUsersAsync()).ReturnsAsync(users);
+
+            // Act
+            var result = await _controller.Users();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<UsersViewModel>(viewResult.Model);
+            Assert.Equal(2, model.Users.Count);
+            Assert.Equal("none", model.SortOrder);
+        }
+
+        [Fact]
+        public async Task Users_ReturnsViewWithUsersOrderedByLikesReceived()
+        {
+            // Arrange
+            var users = new List<User> { new User(), new User() };
+            _mockUsersRepository
+                .Setup(x => x.GetUsersOrderedByLikesReceivedAsync())
+                .ReturnsAsync(users);
+
+            // Act
+            var result = await _controller.Users("likesReceived");
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<UsersViewModel>(viewResult.Model);
+            Assert.Equal(2, model.Users.Count);
+            Assert.Equal("likesReceived", model.SortOrder);
+            _mockUsersRepository.Verify(x => x.GetUsersOrderedByLikesReceivedAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task Users_ReturnsViewWithUsersOrderedByLikesGiven()
+        {
+            // Arrange
+            var users = new List<User> { new User(), new User() };
+            _mockUsersRepository
+                .Setup(x => x.GetUsersOrderedByLikesGivenAsync())
+                .ReturnsAsync(users);
+
+            // Act
+            var result = await _controller.Users("likesGiven");
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<UsersViewModel>(viewResult.Model);
+            Assert.Equal(2, model.Users.Count);
+            Assert.Equal("likesGiven", model.SortOrder);
+            _mockUsersRepository.Verify(x => x.GetUsersOrderedByLikesGivenAsync(), Times.Once);
+        }
+
+        [Fact]
         public async Task EditUser_WithValidId_ReturnsViewWithUser()
         {
             // Arrange
