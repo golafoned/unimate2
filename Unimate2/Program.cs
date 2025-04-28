@@ -15,7 +15,27 @@ builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Add services to the container
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string connectionString;
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException(
+            "Connection string 'DefaultConnection' not found in configuration for Development environment."
+        );
+    }
+}
+else
+{
+    connectionString = Environment.GetEnvironmentVariable("AZURE_DB_CONNECTION_STRING")!;
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException(
+            "Connection string not found in environment variables (e.g., AZURE_DB_CONNECTION_STRING) or configuration for Production environment."
+        );
+    }
+}
 
 builder.Services.AddDbContext<ServerDbContext>(options => options.UseNpgsql(connectionString));
 
