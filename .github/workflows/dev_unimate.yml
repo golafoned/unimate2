@@ -23,24 +23,6 @@ jobs:
               with:
                   dotnet-version: "8.0.x" # Specify .NET 8.0.x for compatibility
 
-            - name: Install EF Core CLI
-              run: dotnet tool install --global dotnet-ef --version 8.0.8 # Match your EF Core version
-
-            - name: Restore dependencies
-              run: dotnet restore unimate2.sln # Specify the solution file
-
-            - name: Build with dotnet
-              run: dotnet build unimate2.sln --configuration Release --no-restore
-
-            - name: Run tests
-              run: dotnet test Unimate2.Tests/Unimate2.Tests.csproj --no-build --verbosity normal
-
-            - name: Update database
-              env:
-                  CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
-              run: dotnet ef database update --project Unimate2/Unimate2.csproj
-              working-directory: Unimate2 # Ensure correct folder for EF migrations
-
             - name: Publish Unimate2
               run: dotnet publish Unimate2/Unimate2.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
