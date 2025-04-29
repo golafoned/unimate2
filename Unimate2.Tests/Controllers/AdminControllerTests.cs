@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -130,8 +130,9 @@ namespace UniMate2.Tests.Controllers
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<List<User>>(viewResult.Model);
-            Assert.Equal(2, model.Count);
+            var model = Assert.IsAssignableFrom<UsersViewModel>(viewResult.Model);
+
+            Assert.Equal(2, model.Users.Count);
         }
 
         [Fact]
@@ -707,5 +708,46 @@ namespace UniMate2.Tests.Controllers
             Assert.Equal("UserImages", redirectResult.ActionName);
             Assert.NotNull(_controller.TempData["SuccessMessage"]);
         }
+
+        [Fact]
+        public async Task ActivateShadowban_WithValidId_SetsShadowbanAndRedirects()
+        {
+            // Arrange
+            var userId = "user123";
+            var user = new User { Id = userId, IsShadowbanned = false };
+            _mockUsersRepository.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            _mockUsersRepository.Setup(x => x.UpdateUserAsync(user)).ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.ActivateShadowban(userId);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Users", redirectResult.ActionName);
+            Assert.True(user.IsShadowbanned); 
+            Assert.NotNull(_controller.TempData["SuccessMessage"]);
+            _mockUsersRepository.Verify(x => x.UpdateUserAsync(user), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeactivateShadowban_WithValidId_UnsetsShadowbanAndRedirects()
+        {
+            // Arrange
+            var userId = "user123";
+            var user = new User { Id = userId, IsShadowbanned = true };
+            _mockUsersRepository.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            _mockUsersRepository.Setup(x => x.UpdateUserAsync(user)).ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.DeactivateShadowban(userId);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Users", redirectResult.ActionName);
+            Assert.False(user.IsShadowbanned); 
+            Assert.NotNull(_controller.TempData["SuccessMessage"]);
+            _mockUsersRepository.Verify(x => x.UpdateUserAsync(user), Times.Once);
+        }
+
     }
 }
