@@ -15,55 +15,61 @@ using Xunit;
 
 namespace UniMate2.Tests.Controllers
 {
-    public class AdminControllerTests
+    public class AdminControllerTests : IDisposable
     {
+        private readonly AdminController _controller;
+        private readonly ILogger<AdminController> _logger;
+        private readonly ServerDbContext _context;
+        private readonly Mock<UserManager<User>> _mockUserManager;
+        private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly Mock<IUsersRepository> _mockUsersRepository;
         private readonly Mock<IEventsRepository> _mockEventsRepository;
-        private readonly Mock<ILogger<AdminController>> _mockLogger;
         private readonly Mock<ILikeRepository> _mockLikeRepository;
         private readonly Mock<IDislikeRepository> _mockDislikeRepository;
         private readonly Mock<IFriendsRepository> _mockFriendsRepository;
-        private readonly Mock<UserManager<User>> _mockUserManager;
-        private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
-        private readonly AdminController _controller;
-        private readonly Mock<ServerDbContext> _mockContext;
-
 
         public AdminControllerTests()
         {
+            _context = ServerDbContextFactory.Create();
+
             _mockUsersRepository = new Mock<IUsersRepository>();
             _mockEventsRepository = new Mock<IEventsRepository>();
-            _mockLogger = new Mock<ILogger<AdminController>>();
             _mockLikeRepository = new Mock<ILikeRepository>();
             _mockDislikeRepository = new Mock<IDislikeRepository>();
             _mockFriendsRepository = new Mock<IFriendsRepository>();
             _mockUserManager = UserManagerMock.CreateMock();
-            _mockContext = new Mock<ServerDbContext>();
+
             _mockRoleManager = new Mock<RoleManager<IdentityRole>>(
                 Mock.Of<IRoleStore<IdentityRole>>(),
-                null,
-                null,
-                null,
-                null
+                new List<IRoleValidator<IdentityRole>> { new RoleValidator<IdentityRole>() },
+                Mock.Of<ILookupNormalizer>(),
+                new IdentityErrorDescriber(),
+                Mock.Of<ILogger<RoleManager<IdentityRole>>>()
             );
+
+            _logger = Mock.Of<ILogger<AdminController>>();
 
             _controller = new AdminController(
                 _mockUsersRepository.Object,
                 _mockEventsRepository.Object,
-                _mockLogger.Object,
+                _logger,
                 _mockLikeRepository.Object,
                 _mockDislikeRepository.Object,
                 _mockFriendsRepository.Object,
                 _mockUserManager.Object,
                 _mockRoleManager.Object,
-                _mockContext.Object
+                _context
             );
 
-            // Initialize TempData for the controller to prevent NullReferenceException
             _controller.TempData = new TempDataDictionary(
                 new DefaultHttpContext(),
                 Mock.Of<ITempDataProvider>()
             );
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
 
         [Fact]
@@ -135,8 +141,8 @@ namespace UniMate2.Tests.Controllers
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<List<User>>(viewResult.Model);
-            Assert.Equal(2, model.Count);
+            var model = Assert.IsAssignableFrom<UsersViewModel>(viewResult.Model);
+            Assert.Equal(2, model.Users.Count);
         }
 
         [Fact]

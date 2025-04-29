@@ -52,3 +52,6 @@ bower_components/
 
 # Ignore JetBrains Rider workspace
 *.sln.ide
+
+# Ignore global.json
+global.json

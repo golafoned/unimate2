@@ -1,17 +1,15 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UniMate2.Models.Domain;
 using UniMate2.Data;
 using UniMate2.Models.Domain;
 using UniMate2.Models.Domain.Enums;
 using UniMate2.Models.DTO;
 using UniMate2.Models.ViewModels;
 using UniMate2.Repositories;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 
 namespace UniMate2.Controllers
 {
@@ -748,15 +746,25 @@ namespace UniMate2.Controllers
                 return false;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> ReportAbuse(string reportedUserId, string reason)
         {
             var reporterId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (reporterId == null)
+            {
+                _logger.LogWarning(
+                    "ReportAbuse called by unauthenticated user or user without ID claim."
+                );
+                // Or return BadRequest("Reporter ID not found."); depending on requirements
+                return Unauthorized();
+            }
+
             // Створити репорт
             var report = new AbuseReport
             {
-                ReporterId =reporterId,
+                ReporterId = reporterId,
                 ReportedUserId = reportedUserId,
                 Reason = reason,
             };
@@ -765,8 +773,6 @@ namespace UniMate2.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Suggestions", "Users"); // або куди там треба
-
         }
-
     }
 }

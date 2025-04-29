@@ -25,7 +25,7 @@ namespace Unimate2.Tests.Controllers
         public AccountControllerTests()
         {
             // Setup UserManager mock
-            _mockUserManager = MockUserManager<User>();
+            _mockUserManager = MockUserManager();
 
             // Setup SignInManager mock
             _mockSignInManager = MockSignInManager();
@@ -34,20 +34,19 @@ namespace Unimate2.Tests.Controllers
             _mockLogger = new Mock<ILogger<AccountController>>();
         }
 
-        private static Mock<UserManager<User>> MockUserManager<TUser>()
-            where TUser : class
+        private static Mock<UserManager<User>> MockUserManager()
         {
-            var store = new Mock<IUserStore<TUser>>();
+            var store = new Mock<IUserStore<User>>();
             var optionsAccessor = new Mock<IOptions<IdentityOptions>>();
-            var passwordHasher = new Mock<IPasswordHasher<TUser>>();
-            var userValidators = new List<IUserValidator<TUser>>();
-            var passwordValidators = new List<IPasswordValidator<TUser>>();
+            var passwordHasher = new Mock<IPasswordHasher<User>>();
+            var userValidators = new List<IUserValidator<User>>();
+            var passwordValidators = new List<IPasswordValidator<User>>();
             var keyNormalizer = new Mock<ILookupNormalizer>();
             var errors = new Mock<IdentityErrorDescriber>();
             var services = new Mock<IServiceProvider>();
-            var logger = new Mock<ILogger<UserManager<TUser>>>();
+            var logger = new Mock<ILogger<UserManager<User>>>();
 
-            var mgr = new Mock<UserManager<TUser>>(
+            var mgr = new Mock<UserManager<User>>(
                 store.Object,
                 optionsAccessor.Object,
                 passwordHasher.Object,
@@ -59,7 +58,7 @@ namespace Unimate2.Tests.Controllers
                 logger.Object
             );
 
-            return mgr as Mock<UserManager<User>>;
+            return mgr;
         }
 
         private Mock<SignInManager<User>> MockSignInManager()
@@ -80,6 +79,18 @@ namespace Unimate2.Tests.Controllers
                 schemes.Object,
                 confirmation.Object
             );
+        }
+
+        public static ClaimsPrincipal GetTestClaimsPrincipal()
+        {
+            // Return a valid ClaimsPrincipal instead of potentially null
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "testuser"),
+                new Claim(ClaimTypes.NameIdentifier, "user-id"),
+            };
+            var identity = new ClaimsIdentity(claims, "Test");
+            return new ClaimsPrincipal(identity);
         }
 
         #region Register GET Tests

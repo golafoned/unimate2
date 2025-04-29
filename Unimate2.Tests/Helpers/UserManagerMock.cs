@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -37,19 +39,39 @@ namespace UniMate2.Tests.Helpers
         public static Mock<UserManager<User>> CreateMock()
         {
             var store = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(
+            var mockUserManager = new Mock<UserManager<User>>(
                 store.Object,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                Mock.Of<IOptions<IdentityOptions>>(),
+                Mock.Of<IPasswordHasher<User>>(),
+                new List<IUserValidator<User>> { new UserValidator<User>() },
+                new List<IPasswordValidator<User>> { new PasswordValidator<User>() },
+                Mock.Of<ILookupNormalizer>(),
+                new IdentityErrorDescriber(),
+                Mock.Of<IServiceProvider>(),
+                Mock.Of<ILogger<UserManager<User>>>()
             );
 
-            return userManagerMock;
+            mockUserManager
+                .Setup(x => x.CreateAsync(It.IsAny<User>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager
+                .Setup(x => x.DeleteAsync(It.IsAny<User>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager
+                .Setup(x => x.UpdateAsync(It.IsAny<User>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager
+                .Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager
+                .Setup(x => x.RemoveFromRoleAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            return mockUserManager;
         }
     }
 }
