@@ -1,0 +1,49 @@
+@model UniMate2.Models.DTO.EventDto
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container mt-4">
+    <h1>Create Event</h1>
+    
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="StartDate" class="form-label">Start Date</label>
+            <input asp-for="StartDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="EndDate" class="form-label">End Date</label>
+            <input asp-for="EndDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label">Location</label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

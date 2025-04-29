@@ -1,0 +1,62 @@
+@model List<UniMate2.Models.ViewModels.Admin.UserImageViewModel>
+@{
+    ViewData["Title"] = "Manage User Images";
+}
+
+<div class="container mt-4">
+    <h1>Manage User Images</h1>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                <li>@TempData["ErrorMessage"]</li>
+            </ul>
+        </div>
+    }
+
+    <div class="row">
+        @if (Model.Any())
+        {
+            @foreach (var imageVM in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="@imageVM.ImagePath" class="card-img-top" alt="User image" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@imageVM.UserName</h5>
+                            <a href="@Url.Action("ViewProfile", "Users", new { id = imageVM.UserId })" class="btn btn-sm btn-info mb-2">View Profile</a>
+                            <form asp-action="DeleteUserImage" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="imageId" value="@imageVM.ImageId" />
+                                <button type="submit" class="btn btn-danger btn-sm w-100" 
+                                        onclick="return confirm('Are you sure you want to delete this image?');">
+                                    Delete Image
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No user images found in the system.
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="mb-3">
+        <a asp-action="Dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>

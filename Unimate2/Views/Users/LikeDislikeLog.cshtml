@@ -1,0 +1,185 @@
+@model UniMate2.Models.ViewModels.LikeDislikeLogViewModel
+@{
+    ViewData["Title"] = "Like & Dislike Log";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Interactions Log</h1>
+
+    <ul class="nav nav-tabs mb-4" id="logTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="like-sent-tab" data-bs-toggle="tab" data-bs-target="#like-sent" 
+                    type="button" role="tab" aria-controls="like-sent" aria-selected="true">
+                <i class="bi bi-heart-fill text-danger me-1"></i> I Liked (@Model.UsersILiked.Count)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="like-received-tab" data-bs-toggle="tab" data-bs-target="#like-received" 
+                    type="button" role="tab" aria-controls="like-received" aria-selected="false">
+                <i class="bi bi-heart text-danger me-1"></i> Who Liked Me (@Model.UsersWhoLikedMe.Count)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dislike-sent-tab" data-bs-toggle="tab" data-bs-target="#dislike-sent" 
+                    type="button" role="tab" aria-controls="dislike-sent" aria-selected="false">
+                <i class="bi bi-x-circle-fill text-danger me-1"></i> I Disliked (@Model.UsersIDisliked.Count)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dislike-received-tab" data-bs-toggle="tab" data-bs-target="#dislike-received" 
+                    type="button" role="tab" aria-controls="dislike-received" aria-selected="false">
+                <i class="bi bi-x-circle text-danger me-1"></i> Who Disliked Me (@Model.UsersWhoDislikedMe.Count)
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="logTabContent">
+        <!-- I Liked Tab -->
+        <div class="tab-pane fade show active" id="like-sent" role="tabpanel" aria-labelledby="like-sent-tab">
+            @if (Model.UsersILiked.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.UsersILiked)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" 
+                                           class="btn btn-primary btn-sm">View Profile</a>
+                                    </td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-heart text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">You haven't liked any users yet.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Who Liked Me Tab -->
+        <div class="tab-pane fade" id="like-received" role="tabpanel" aria-labelledby="like-received-tab">
+            @if (Model.UsersWhoLikedMe.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.UsersWhoLikedMe)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" 
+                                           class="btn btn-primary btn-sm">View Profile</a>
+                                    </td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-heartbreak text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">No one has liked you yet.</p>
+                </div>
+            }
+        </div>
+
+        <!-- I Disliked Tab -->
+        <div class="tab-pane fade" id="dislike-sent" role="tabpanel" aria-labelledby="dislike-sent-tab">
+            @if (Model.UsersIDisliked.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.UsersIDisliked)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" 
+                                           class="btn btn-primary btn-sm">View Profile</a>
+                                    </td>
+                                </tr>
+                            
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-x-circle text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">You haven't disliked any users yet.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Who Disliked Me Tab -->
+        <div class="tab-pane fade" id="dislike-received" role="tabpanel" aria-labelledby="dislike-received-tab">
+            @if (Model.UsersWhoDislikedMe.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.UsersWhoDislikedMe)
+                            {
+                                <tr>
+                                    <td>@user.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewProfile", "Users", new { id = user.Id })" 
+                                           class="btn btn-primary btn-sm">View Profile</a>
+                                    </td>
+                                </tr>
+                            
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-emoji-smile text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-3">No one has disliked you yet.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

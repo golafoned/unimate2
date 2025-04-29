@@ -1,0 +1,78 @@
+@model UniMate2.Models.ViewModels.UserSuggestionsViewModel
+@{
+    ViewData["Title"] = "User Suggestions";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form asp-controller="Friends" asp-action="Suggestions" method="get" class="d-flex">
+                <input type="text" name="searchTerm" class="form-control me-2" placeholder="Search by name or email" value="@Model.SearchTerm">
+                <button type="submit" class="btn btn-primary">Search</button>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <a asp-controller="Friends" asp-action="Suggestions" class="btn btn-outline-secondary ms-2">Clear</a>
+                }
+            </form>
+        </div>
+    </div>
+    
+    <h2>People You May Know</h2>
+    
+    @if (Model.Suggestions.Any())
+    {
+        <div class="row">
+            @foreach (var user in Model.Suggestions)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                @if (!string.IsNullOrEmpty(user.ProfilePicture) || !string.IsNullOrEmpty(user.ProfileImagePath))
+                                {
+                                    <img src="@(string.IsNullOrEmpty(user.ProfilePicture) ? user.ProfileImagePath : user.ProfilePicture)" 
+                                         alt="Profile Picture" 
+                                         class="rounded-circle mb-3 mx-auto d-block" 
+                                         style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-secondary mx-auto mb-3 d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; border: 3px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                        <i class="bi bi-person text-white" style="font-size: 3rem;"></i>
+                                    </div>
+                                }
+                                <h5 class="card-title">@user.FirstName @user.LastName</h5>
+                                <p class="card-text text-muted">@user.Email</p>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <a asp-controller="Users" asp-action="ViewProfile" asp-route-id="@user.Id" class="btn btn-outline-secondary w-100 me-2">
+                                    <i class="bi bi-eye me-2"></i> View Profile
+                                </a>
+                                <form asp-controller="Friends" asp-action="SendRequest" method="post" class="w-100 ms-2">
+                                    <input type="hidden" name="ReceiverEmail" value="@user.Email" />
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-person-plus me-2"></i> Add Friend
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <p>No users found matching your search. Try a different search term or check back later.</p>
+            }
+            else
+            {
+                <p>No user suggestions available at the moment.</p>
+            }
+        </div>
+    }
+</div>

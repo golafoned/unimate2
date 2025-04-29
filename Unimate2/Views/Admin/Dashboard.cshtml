@@ -1,0 +1,73 @@
+@model UniMate2.Models.ViewModels.Admin.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-4">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text display-4">@Model.TotalUsers</p>
+                    <a asp-action="Users" class="btn btn-light">Manage Users</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Events</h5>
+                    <p class="card-text display-4">@Model.TotalEvents</p>
+                    <a asp-action="Events" class="btn btn-light">Manage Events</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Friend Requests</h5>
+                    <p class="card-text display-4">@Model.TotalFriendRequests</p>
+                    <a asp-action="FriendRequests" class="btn btn-light">Manage Friend Requests</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Total Likes</h5>
+                    <p class="card-text display-4">@Model.TotalLikes</p>
+                    <a asp-action="Likes" class="btn btn-dark">Manage Likes</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Dislikes</h5>
+                    <p class="card-text display-4">@Model.TotalDislikes</p>
+                    <a asp-action="Dislikes" class="btn btn-light">Manage Dislikes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-action="UserImages" class="btn btn-outline-primary">Manage User Images</a>
+                        <a asp-controller="Events" asp-action="Create" class="btn btn-outline-success">Create New Event</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
