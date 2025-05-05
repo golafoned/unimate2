@@ -40,12 +40,12 @@
                                             <form asp-controller="Friends" asp-action="UpdateRequestStatus" method="post" class="inline">
                                                 <input type="hidden" name="requestId" value="@request.Id" />
                                                 <input type="hidden" name="action" value="accept" />
-                                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow-sm transition duration-200">Accept</button>
+                                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded-lg text-xs shadow-sm transition duration-200">Accept</button>
                                             </form>
                                             <form asp-controller="Friends" asp-action="UpdateRequestStatus" method="post" class="inline">
                                                 <input type="hidden" name="requestId" value="@request.Id" />
                                                 <input type="hidden" name="action" value="decline" />
-                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow-sm transition duration-200">Decline</button>
+                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded-lg text-xs shadow-sm transition duration-200">Decline</button>
                                             </form>
                                         </div>
                                     </div>

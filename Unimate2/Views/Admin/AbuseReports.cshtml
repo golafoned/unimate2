@@ -36,12 +36,12 @@
                         <!-- Delete Abuse Report Button -->
                         <form asp-action="DeleteAbuseReport" method="post" class="inline-block">
                             <input type="hidden" name="reportId" value="@report.Id" />
-                            <button type="submit" class="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-700 transition duration-200">Delete Report</button>
+                            <button type="submit" class="bg-red-600 text-white py-1 px-4 rounded-lg hover:bg-red-700 transition duration-200">Delete Report</button>
                         </form>
                         <!-- Ban User Button -->
                         <form asp-action="BanUser" method="post" class="inline-block ml-2">
                             <input type="hidden" name="userId" value="@report.ReportedUserId" />
-                            <button type="submit" class="bg-yellow-600 text-white py-1 px-4 rounded-md hover:bg-yellow-700 transition duration-200">Ban User</button>
+                            <button type="submit" class="bg-yellow-600 text-white py-1 px-4 rounded-lg hover:bg-yellow-700 transition duration-200">Ban User</button>
                         </form>
                     </td>
                 </tr>
