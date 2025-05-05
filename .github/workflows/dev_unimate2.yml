@@ -17,12 +17,6 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-            - name: Setup Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "18"
-            - name: Install Node.js dependencies
-              run: npm --version
 
             - name: Set up .NET Core
               uses: actions/setup-dotnet@v4
