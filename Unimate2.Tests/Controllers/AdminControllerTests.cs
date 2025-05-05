@@ -749,5 +749,29 @@ namespace UniMate2.Tests.Controllers
             _mockUsersRepository.Verify(x => x.UpdateUserAsync(user), Times.Once);
         }
 
+        [Fact]
+        public async Task ActivateShadowban_ValidUserId_UpdatesUserAndRedirects()
+        {
+            // Arrange
+            var testUserId = "user123";
+            var testUser = new User { Id = testUserId, IsShadowbanned = false };
+
+            _mockUsersRepository.Setup(x => x.GetUserByIdAsync(testUserId))
+                                .ReturnsAsync(testUser);
+
+            _mockUsersRepository.Setup(x => x.UpdateUserAsync(It.Is<User>(u => u.Id == testUserId && u.IsShadowbanned)))
+                                .ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.ActivateShadowban(testUserId);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Users", redirectResult.ActionName);
+
+            _mockUsersRepository.Verify(x => x.UpdateUserAsync(It.Is<User>(u => u.IsShadowbanned)), Times.Once);
+        }
+
+
     }
 }
