@@ -1,60 +1,51 @@
-﻿@model IEnumerable<UniMate2.Models.Domain.AbuseReport>
-
-@{
+﻿@{
     ViewData["Title"] = "Abuse Reports";
 }
 
-<h1>Abuse Reports</h1>
+<div class="container mx-auto mt-6 px-4">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-4">Abuse Reports</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Reporter</th>
-            <th>Reported User</th>
-            <th>Reason</th>
-            <th>Created At</th>
-            <th>Actions</th> <!-- нова колонка -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var report in Model)
-        {
-            <tr>
-                <td>@report.Id</td>
-                <td>
-                    @if (report.ReportingUser != null)
-                    {
-                        @report.ReportingUser.UserName
-                    }
-                    else
-                    {
-                        @report.ReporterId
-                    }
-                </td>
-                <td>
-                    @if (report.ReportedUser != null)
-                    {
-                        @report.ReportedUser.UserName
-                    }
-                    else
-                    {
-                        @report.ReportedUserId
-                    }
-                </td>
-                <td>@report.Reason</td>
-                <td>@report.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>
-                    <form asp-action="DeleteAbuseReport" method="post" style="display:inline;">
-                        <input type="hidden" name="reportId" value="@report.Id" />
-                        <button type="submit" class="btn btn-danger btn-sm">Delete Report</button>
-                    </form>
-                    <form asp-action="BanUser" method="post" style="display:inline; margin-left:5px;">
-                        <input type="hidden" name="userId" value="@report.ReportedUserId" />
-                        <button type="submit" class="btn btn-warning btn-sm">Ban User</button>
-                    </form>
-                </td>
+    <!-- Table for Abuse Reports -->
+    <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+        <thead>
+            <tr class="bg-gray-100 text-gray-600">
+                <th class="px-6 py-3 border-b">Reported User</th>
+                <th class="px-6 py-3 border-b">Reason</th>
+                <th class="px-6 py-3 border-b">Date</th>
+                <th class="px-6 py-3 border-b">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <!-- Iterate over each report directly from the model -->
+            @foreach (var report in Model)
+            {
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        @if (report.ReportedUser != null)
+                        {
+                            @report.ReportedUser.UserName
+                        }
+                        else
+                        {
+                            @report.ReportedUserId
+                        }
+                    </td>
+                    <td class="px-6 py-4">@report.Reason</td>
+                    <td class="px-6 py-4">@report.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="px-6 py-4 flex space-x-2">
+                        <!-- Delete Abuse Report Button -->
+                        <form asp-action="DeleteAbuseReport" method="post" class="inline-block">
+                            <input type="hidden" name="reportId" value="@report.Id" />
+                            <button type="submit" class="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-700 transition duration-200">Delete Report</button>
+                        </form>
+                        <!-- Ban User Button -->
+                        <form asp-action="BanUser" method="post" class="inline-block ml-2">
+                            <input type="hidden" name="userId" value="@report.ReportedUserId" />
+                            <button type="submit" class="bg-yellow-600 text-white py-1 px-4 rounded-md hover:bg-yellow-700 transition duration-200">Ban User</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

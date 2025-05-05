@@ -3,71 +3,55 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mt-4">
-    <h1>Admin Dashboard</h1>
-    
-    <div class="row mt-4">
-        <div class="col-md-4 mb-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <p class="card-text display-4">@Model.TotalUsers</p>
-                    <a asp-action="Users" class="btn btn-light">Manage Users</a>
-                </div>
-            </div>
+<div class="container mx-auto mt-6 px-4">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Admin Dashboard</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Total Users Card -->
+        <div class="bg-blue-100 text-blue-600 rounded-lg shadow-md p-6">
+            <h5 class="text-lg font-semibold">Total Users</h5>
+            <p class="text-3xl font-bold">@Model.TotalUsers</p>
+            <a asp-action="Users" class="inline-block mt-4 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition duration-200">Manage Users</a>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Events</h5>
-                    <p class="card-text display-4">@Model.TotalEvents</p>
-                    <a asp-action="Events" class="btn btn-light">Manage Events</a>
-                </div>
-            </div>
+
+        <!-- Total Events Card -->
+        <div class="bg-green-100 text-green-600 rounded-lg shadow-md p-6">
+            <h5 class="text-lg font-semibold">Total Events</h5>
+            <p class="text-3xl font-bold">@Model.TotalEvents</p>
+            <a asp-action="Events" class="inline-block mt-4 bg-white text-green-600 font-semibold py-2 px-4 rounded-lg hover:bg-green-200 transition duration-200">Manage Events</a>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Friend Requests</h5>
-                    <p class="card-text display-4">@Model.TotalFriendRequests</p>
-                    <a asp-action="FriendRequests" class="btn btn-light">Manage Friend Requests</a>
-                </div>
-            </div>
+
+        <!-- Total Friend Requests Card -->
+        <div class="bg-teal-100 text-teal-600 rounded-lg shadow-md p-6">
+            <h5 class="text-lg font-semibold">Total Friend Requests</h5>
+            <p class="text-3xl font-bold">@Model.TotalFriendRequests</p>
+            <a asp-action="FriendRequests" class="inline-block mt-4 bg-white text-teal-600 font-semibold py-2 px-4 rounded-lg hover:bg-teal-200 transition duration-200">Manage Friend Requests</a>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card bg-warning text-dark">
-                <div class="card-body">
-                    <h5 class="card-title">Total Likes</h5>
-                    <p class="card-text display-4">@Model.TotalLikes</p>
-                    <a asp-action="Likes" class="btn btn-dark">Manage Likes</a>
-                </div>
-            </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+        <!-- Total Likes Card -->
+        <div class="bg-yellow-100 text-yellow-600 rounded-lg shadow-md p-6">
+            <h5 class="text-lg font-semibold">Total Likes</h5>
+            <p class="text-3xl font-bold">@Model.TotalLikes</p>
+            <a asp-action="Likes" class="inline-block mt-4 bg-white text-yellow-600 font-semibold py-2 px-4 rounded-lg hover:bg-yellow-200 transition duration-200">Manage Likes</a>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card bg-danger text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Dislikes</h5>
-                    <p class="card-text display-4">@Model.TotalDislikes</p>
-                    <a asp-action="Dislikes" class="btn btn-light">Manage Dislikes</a>
-                </div>
-            </div>
+
+        <!-- Total Dislikes Card -->
+        <div class="bg-red-100 text-red-600 rounded-lg shadow-md p-6">
+            <h5 class="text-lg font-semibold">Total Dislikes</h5>
+            <p class="text-3xl font-bold">@Model.TotalDislikes</p>
+            <a asp-action="Dislikes" class="inline-block mt-4 bg-white text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-200 transition duration-200">Manage Dislikes</a>
         </div>
     </div>
-    
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Quick Actions</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a asp-action="UserImages" class="btn btn-outline-primary">Manage User Images</a>
-                        <a asp-controller="Events" asp-action="Create" class="btn btn-outline-success">Create New Event</a>
-                        <a asp-action="AbuseReports" class="btn btn-outline-danger">Handle Abuse Reports</a>
-                    </div>
-                </div>
+
+    <div class="mt-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h5 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h5>
+            <div class="flex flex-wrap gap-4">
+                <a asp-action="UserImages" class="inline-block bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition duration-200">Manage User Images</a>
+                <a asp-controller="Events" asp-action="Create" class="inline-block bg-green-100 text-green-600 font-semibold py-2 px-4 rounded-lg hover:bg-green-200 transition duration-200">Create New Event</a>
+                <a asp-action="AbuseReports" class="inline-block bg-red-100 text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-200 transition duration-200">Handle Abuse Reports</a>
             </div>
         </div>
     </div>
