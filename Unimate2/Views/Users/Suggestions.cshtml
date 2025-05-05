@@ -4,56 +4,69 @@
     ViewData["Title"] = "User Suggestions";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4 text-center">Find Your Match</h2>
+<!-- Removed min-h-screen -->
+<div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col pb-16"> 
     
     @Html.AntiForgeryToken()
 
     @if (Model != null && Model.Any())
     {
-        <div class="card-container">
-            @foreach (var user in Model)
-            {
-                <div class="suggestion-card" data-user-id="@user.Id">
-                    <div class="card">
-                        <div class="card-image-container">
-                            @if (user.ProfileImagePath != null)
-                            {
-                                <img src="@user.ProfileImagePath" class="card-img" alt="Profile Image">
-                            }
-                            else
-                            {
-                                <img src="~/images/default-profile.png" class="card-img" alt="Default Profile Image">
-                            }
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">@user.FirstName</h3>
-                            <p class="card-text">@(string.IsNullOrEmpty(user.Bio) ? "No bio available" : user.Bio)</p>
-                            <p class="card-text small text-muted">@user.Email</p>
+        <!-- Card Stacking Area -->
+        <div id="card-area-container" class="relative flex items-center justify-center mb-4"> 
+            <!-- Card Container -->
+            <div id="card-container" class="w-full h-[60vh] max-h-[420px] relative"> 
+                @foreach (var user in Model)
+                {
+                    <!-- Card structure -->
+                    <div class="suggestion-card absolute inset-0 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-transform duration-300 ease-in-out transform hidden flex flex-col" 
+                         data-user-id="@user.Id">
+                        <img src="@(user.ProfileImagePath ?? "/images/default-profile.png")" 
+                             class="w-full h-3/4 object-cover flex-shrink-0" 
+                             alt="@(user.ProfileImagePath != null ? "Profile Image" : "Default Profile Image")">
+                        <div class="p-4 flex-grow overflow-hidden"> 
+                            <h3 class="text-xl font-semibold text-gray-800 mb-1 truncate">@user.FirstName</h3>
+                            <p class="text-gray-600 text-sm mb-2">@(string.IsNullOrEmpty(user.Bio) ? "No bio available" : user.Bio)</p>
+                            <p class="text-xs text-gray-400 truncate mt-auto pt-1">@user.Email</p>
                         </div>
                     </div>
+                }
+            </div>
+            <!-- No More Suggestions Message - Moved inside card area container, hidden initially -->
+            <div id="no-more-suggestions-placeholder" class="no-more-suggestions text-center hidden w-full h-[60vh] max-h-[420px] flex items-center justify-center">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">You've seen all suggestions!</h3>
+                    <p class="text-gray-600">Check back later for more.</p>
                 </div>
-            }
+            </div>
         </div>
 
-        <div class="action-buttons text-center mt-4">
-            <button class="btn btn-lg btn-danger dislike-btn"><i class="bi bi-x-circle"></i> Dislike</button>
-            <a id="view-profile-btn" href="#" class="btn btn-lg btn-info mx-2"><i class="bi bi-person"></i> View Profile</a>
-            <button class="btn btn-lg btn-success like-btn"><i class="bi bi-heart-fill"></i> Like</button>
-        </div>
-        
-        <div class="no-more-suggestions text-center mt-5 d-none">
-            <div class="alert alert-info p-5">
-                <h3><i class="bi bi-emoji-smile"></i> You've seen all suggestions!</h3>
-                <p>Check back later for more suggestions.</p>
-            </div>
+        <!-- Action Buttons -->
+        <div class="action-buttons flex justify-around items-center pt-4 flex-shrink-0">
+             <button class="dislike-btn bg-white text-red-500 hover:bg-red-50 border border-gray-200 rounded-full p-4 shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <a id="view-profile-btn" href="#" class="bg-white text-blue-500 hover:bg-blue-50 border border-gray-200 rounded-full p-4 shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </a>
+            <button class="like-btn bg-white text-green-500 hover:bg-green-50 border border-gray-200 rounded-full p-4 shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
     }
     else
     {
-        <div class="alert alert-warning text-center" role="alert">
-            <h3><i class="bi bi-emoji-neutral"></i> No suggestions available.</h3>
-            <p>Check back later for new suggestions.</p>
+        <!-- No Suggestions Available Message -->
+        <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-6 rounded-lg text-center flex-grow flex items-center justify-center" role="alert">
+             <div>
+                 <h3 class="text-xl font-semibold mb-2">No suggestions available.</h3>
+                 <p class="text-gray-700">Check back later for new suggestions.</p>
+             </div>
         </div>
     }
 </div>
@@ -63,100 +76,86 @@
         $(document).ready(function() {
             const cards = $('.suggestion-card');
             let currentCardIndex = 0;
-            
-            // Initially show only the first card
-            if (cards.length > 0) {
-                updateCardDisplay();
+            const actionButtons = $('.action-buttons');
+            // Get the new placeholder and the inner card container
+            const noMoreMessagePlaceholder = $('#no-more-suggestions-placeholder'); 
+            const cardContainer = $('#card-container'); 
+            const viewProfileBtn = $('#view-profile-btn');
+            const token = $('input[name="__RequestVerificationToken"]').val(); // Cache token
+
+            function updateCardDisplay() {
+                // Hide all individual cards and reset transforms
+                cards.addClass('hidden transform').removeClass('translate-x-full -translate-x-full'); 
+                
+                if (currentCardIndex < cards.length) {
+                    // Show the specific card
+                    $(cards[currentCardIndex]).removeClass('hidden'); 
+                    updateViewProfileLink();
+                    // Ensure main card container is visible and placeholder is hidden
+                    cardContainer.removeClass('hidden'); 
+                    noMoreMessagePlaceholder.addClass('hidden'); 
+                    actionButtons.removeClass('hidden'); // Show buttons
+                } else {
+                    // No more cards left
+                    // Hide the main card container and show the placeholder message
+                    cardContainer.addClass('hidden'); 
+                    noMoreMessagePlaceholder.removeClass('hidden'); 
+                    actionButtons.addClass('hidden'); // Hide buttons
+                }
             }
-            
-            // Handle like button click
-            $('.like-btn').on('click', function() {
-                if (currentCardIndex < cards.length) {
-                    const currentCard = $(cards[currentCardIndex]);
-                    const userId = currentCard.data('user-id');
-                    
-                    // Animation for like
-                    currentCard.addClass('slide-right');
-                    
-                    // Send like action to the server
-                    $.ajax({
-                        url: '@Url.Action("Create", "Like")',
-                        type: 'POST',
-                        data: {
-                            likedUserId: userId,
-                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-                        },
-                        success: function(response) {
-                            console.log('Liked user:', userId);
-                        },
-                        error: function(xhr) {
-                            console.error('Error liking user:', xhr.responseText);
-                        }
-                    });
-                    
-                    // Move to next card after animation
-                    setTimeout(() => {
-                        currentCardIndex++;
-                        updateCardDisplay();
-                    }, 300);
-                }
-            });
-            
-            // Handle dislike button click
-            $('.dislike-btn').on('click', function() {
-                if (currentCardIndex < cards.length) {
-                    const currentCard = $(cards[currentCardIndex]);
-                    const userId = currentCard.data('user-id');
-                    
-                    // Animation for dislike
-                    currentCard.addClass('slide-left');
-                    
-                    // Send dislike action to the server
-                    $.ajax({
-                        url: '@Url.Action("Create", "Dislike")',
-                        type: 'POST',
-                        data: {
-                            dislikedUserId: userId,
-                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-                        },
-                        success: function() {
-                            console.log('Disliked user:', userId);
-                        },
-                        error: function(xhr) {
-                            console.error('Error disliking user:', xhr.responseText);
-                        }
-                    });
-                    
-                    // Move to next card after animation
-                    setTimeout(() => {
-                        currentCardIndex++;
-                        updateCardDisplay();
-                    }, 300);
-                }
-            });
-            
-            // Update view profile button URL
+
             function updateViewProfileLink() {
                 if (currentCardIndex < cards.length) {
                     const userId = $(cards[currentCardIndex]).data('user-id');
-                    $('#view-profile-btn').attr('href', '@Url.Action("ViewProfile", "Users")/' + userId);
+                    viewProfileBtn.attr('href', '@Url.Action("ViewProfile", "Users")/' + userId);
+                } else {
+                     viewProfileBtn.attr('href', '#'); // Reset href if no card is active
                 }
             }
-            
-            // Update which card is showing
-            function updateCardDisplay() {
-                // Hide all cards
-                cards.hide();
-                
-                // Show current card if available
-                if (currentCardIndex < cards.length) {
-                    $(cards[currentCardIndex]).show();
-                    updateViewProfileLink();
-                } else {
-                    // No more cards, show the "no more" message
-                    $('.action-buttons').hide();
-                    $('.no-more-suggestions').removeClass('d-none');
+
+            function handleInteraction(actionType, animationClass, url, dataKey) {
+                 if (currentCardIndex < cards.length) {
+                    const currentCard = $(cards[currentCardIndex]);
+                    const userId = currentCard.data('user-id');
+                    
+                    currentCard.addClass(animationClass);
+                    
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            [dataKey]: userId,
+                            __RequestVerificationToken: token
+                        },
+                        success: function(response) {
+                            console.log(actionType + ' user:', userId);
+                        },
+                        error: function(xhr) {
+                            console.error('Error ' + actionType.toLowerCase() + ' user:', xhr.responseText);
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        currentCardIndex++;
+                        updateCardDisplay();
+                    }, 300);
                 }
+            }
+
+            $('.like-btn').on('click', function() {
+                handleInteraction('Liked', 'translate-x-full', '@Url.Action("Create", "Like")', 'likedUserId');
+            });
+            
+            $('.dislike-btn').on('click', function() {
+                 handleInteraction('Disliked', '-translate-x-full', '@Url.Action("Create", "Dislike")', 'dislikedUserId');
+            });
+            
+            if (cards.length > 0) {
+                updateCardDisplay();
+            } else {
+                 actionButtons.addClass('hidden'); 
+                 cardContainer.addClass('hidden');
+                 noMoreMessagePlaceholder.removeClass('hidden'); 
             }
         });
     </script>

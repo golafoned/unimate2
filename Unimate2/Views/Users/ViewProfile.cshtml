@@ -4,128 +4,138 @@
     ViewData["Title"] = $"{Model.FirstName} {Model.LastName}'s Profile";
 }
 
-<div class="container my-5">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">@Model.FirstName @Model.LastName's Profile</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white shadow-md rounded-xl border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 bg-blue-600 text-white flex flex-col sm:flex-row justify-between items-center rounded-t-xl">
+            <h2 class="text-2xl font-semibold mb-2 sm:mb-0">@Model.FirstName @Model.LastName's Profile</h2>
             <div>
                 @if (ViewData["IsFriend"] != null && ViewData["IsFriend"] as bool? == true)
                 {
-                    <button class="btn btn-light" disabled>
-                        <i class="bi bi-person-check-fill"></i> Friends
+                    <button class="inline-flex items-center bg-white text-green-600 font-semibold py-2 px-4 rounded-lg shadow-sm border border-gray-200 text-sm opacity-75 cursor-not-allowed" disabled>
+                        Friends
                     </button>
                 }
                 else if (ViewData["IsPendingFriend"] != null && ViewData["IsPendingFriend"] as bool? == true)
                 {
-                    <button class="btn btn-light" disabled>
-                        <i class="bi bi-hourglass-split"></i> Request Pending
+                    <button class="inline-flex items-center bg-white text-gray-500 font-semibold py-2 px-4 rounded-lg shadow-sm border border-gray-200 text-sm opacity-75 cursor-not-allowed" disabled>
+                        Request Pending
                     </button>
                 }
                 else
                 {
-                    <form asp-controller="Friends" asp-action="SendRequest" method="post" class="d-inline">
+                    <form asp-controller="Friends" asp-action="SendRequest" method="post" class="inline">
                         <input type="hidden" name="ReceiverEmail" value="@Model.Email" />
-                        <button type="submit" class="btn btn-light">
-                            <i class="bi bi-person-plus"></i> Add Friend
+                        <button type="submit" class="inline-flex items-center bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition duration-200 shadow-sm border border-gray-200 text-sm">
+                            Add Friend
                         </button>
                     </form>
                 }
             </div>
         </div>
-        <div class="card-body">
-            <div class="row">
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Profile Images -->
-                <div class="col-md-4">
+                <div class="md:col-span-1">
                     @if (Model.Images != null && Model.Images.Any())
                     {
-                        <div id="profileCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                @for (int i = 0; i < Model.Images.Count; i++)
-                                {
-                                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                                        @if (!string.IsNullOrEmpty(Model.Images[i].ImagePath))
-                                        {
-                                            <img src="@Model.Images[i].ImagePath" class="d-block w-100 rounded image-clickable" 
-                                                alt="Profile Image" style="height: 300px; object-fit: cover;"
-                                                data-bs-toggle="modal" data-bs-target="#imageModal" 
-                                                data-img-src="@Model.Images[i].ImagePath">
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger">Image path is empty!</div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                            @if (Model.Images.Count > 1)
-                            {
-                                <button class="carousel-control-prev" type="button" data-bs-target="#profileCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#profileCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            }
+                        <div class="relative">
+                             @if (!string.IsNullOrEmpty(Model.Images[0].ImagePath))
+                             {
+                                 <img src="@Model.Images[0].ImagePath" 
+                                      class="block w-full h-72 object-cover rounded-lg cursor-pointer shadow image-clickable" 
+                                      alt="Profile Image"
+                                      data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                      data-img-src="@Model.Images[0].ImagePath">
+                                 @if(Model.Images.Count > 1) {
+                                     <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                                         1 / @Model.Images.Count (Click to view)
+                                     </span>
+                                 }
+                             }
+                             else
+                             {
+                                 <div class="flex items-center justify-center h-72 bg-gray-100 rounded-lg border border-dashed border-gray-300">
+                                     <span class="text-gray-500">Image not available</span>
+                                 </div>
+                             }
                         </div>
                     }
                     else
                     {
-                        <img src="~/images/default-profile.png" class="img-fluid rounded mb-3" alt="Default Profile Image" />
-                        <p class="text-muted">No profile images uploaded.</p>
+                        <img src="~/images/default-profile.png" class="w-full h-72 object-cover rounded-lg border border-gray-200" alt="Default Profile Image" />
+                        <p class="text-gray-500 text-sm mt-2">No profile images uploaded.</p>
                     }
                 </div>
                 
                 <!-- Profile Details -->
-                <div class="col-md-8">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <strong>Email:</strong> @Model.Email
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Birth Date:</strong> @(Model.BirthDate?.ToString("d") ?? "N/A")
-                        </li>
-                        <li class="list-group-item">
-                            <strong>University:</strong> @(Model.University ?? "N/A")
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Faculty:</strong> @(Model.Faculty ?? "N/A")
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Gender:</strong> @(Model.Gender?.ToString() ?? "N/A")
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Bio:</strong>
-                            <p class="mb-0">@(Model.Bio ?? "N/A")</p>
-                        </li>
-                    </ul>
-                    <form asp-action="ReportAbuse" asp-controller="Users" method="post" class="mt-4">
-                        <input type="hidden" name="reportedUserId" value="@Model.Id" />
-                        <div class="mb-3">
-                            <label for="reason" class="form-label">Reason for Report</label>
-                            <input type="text" id="reason" name="reason" placeholder="Enter reason" required class="form-control" />
+                <div class="md:col-span-2">
+                    <div class="space-y-4">
+                        <div class="py-3 border-b border-gray-100">
+                            <strong class="font-semibold text-gray-700 block sm:inline-block sm:w-32">Email:</strong> 
+                            <span class="text-gray-600">@Model.Email</span>
                         </div>
-                        <button type="submit" class="btn btn-danger">Report Abuse</button>
+                        <div class="py-3 border-b border-gray-100">
+                            <strong class="font-semibold text-gray-700 block sm:inline-block sm:w-32">Birth Date:</strong> 
+                            <span class="text-gray-600">@(Model.BirthDate?.ToString("d") ?? "N/A")</span>
+                        </div>
+                        <div class="py-3 border-b border-gray-100">
+                            <strong class="font-semibold text-gray-700 block sm:inline-block sm:w-32">University:</strong> 
+                            <span class="text-gray-600">@(Model.University ?? "N/A")</span>
+                        </div>
+                        <div class="py-3 border-b border-gray-100">
+                            <strong class="font-semibold text-gray-700 block sm:inline-block sm:w-32">Faculty:</strong> 
+                            <span class="text-gray-600">@(Model.Faculty ?? "N/A")</span>
+                        </div>
+                        <div class="py-3 border-b border-gray-100">
+                            <strong class="font-semibold text-gray-700 block sm:inline-block sm:w-32">Gender:</strong> 
+                            <span class="text-gray-600">@(Model.Gender?.ToString() ?? "N/A")</span>
+                        </div>
+                        <div class="py-3">
+                            <strong class="font-semibold text-gray-700 block mb-1">Bio:</strong>
+                            <p class="text-gray-600 mb-0">@(Model.Bio ?? "N/A")</p>
+                        </div>
+                    </div>
+
+                    <!-- Report Abuse Form -->
+                    <form asp-action="ReportAbuse" asp-controller="Users" method="post" class="mt-6 pt-6 border-t border-gray-200">
+                        <input type="hidden" name="reportedUserId" value="@Model.Id" />
+                        <div class="mb-4">
+                            <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Report this user (optional reason):</label>
+                            <input type="text" id="reason" name="reason" placeholder="Enter reason for reporting" 
+                                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3" />
+                        </div>
+                        <button type="submit" 
+                                class="inline-flex items-center bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200 shadow-sm text-sm">
+                            Report Abuse
+                        </button>
                     </form>
 
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- Modal for full-screen image view -->
-<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">@(Model?.FirstName ?? "User")'s Photo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Modal for full-screen image view (Styled with Tailwind, functionality relies on Bootstrap JS) -->
+<div class="modal fade fixed inset-0 z-50 overflow-y-auto hidden" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="relative w-full max-w-4xl mx-auto my-6 p-4">
+        <div class="relative flex flex-col w-full bg-white border border-gray-200 rounded-lg shadow-lg outline-none focus:outline-none">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-5 border-b border-solid border-gray-200 rounded-t">
+                <h5 class="text-xl font-semibold text-gray-800" id="imageModalLabel">@(Model?.FirstName ?? "User")'s Photo</h5>
+                <button type="button" class="p-1 ml-auto bg-transparent border-0 text-black opacity-50 float-right text-3xl leading-none font-semibold outline-none focus:outline-none hover:opacity-75" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body text-center">
-                <img id="fullSizeImage" src="" class="img-fluid" alt="Full size image">
+            <!-- Body -->
+            <div class="relative p-6 flex-auto text-center">
+                <img id="fullSizeImage" src="" class="max-w-full h-auto mx-auto rounded" alt="Full size image">
+            </div>
+             <!-- Footer (Optional) -->
+            <div class="flex items-center justify-end p-4 border-t border-solid border-gray-200 rounded-b">
+                <button type="button" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" data-bs-dismiss="modal">
+                    Close
+                </button>
             </div>
         </div>
     </div>
@@ -133,14 +143,35 @@
 
 @section Scripts {
     <script>
+        // This script assumes Bootstrap's JS is loaded to handle the modal toggling via data-bs-* attributes.
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle clicking on profile images to show in modal
             var imageModal = document.getElementById('imageModal');
-            imageModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var imgSrc = button.getAttribute('data-img-src');
-                var fullSizeImage = document.getElementById('fullSizeImage');
-                fullSizeImage.src = imgSrc;
+            if (imageModal) {
+                imageModal.addEventListener('show.bs.modal', function(event) {
+                    var triggerElement = event.relatedTarget; // Element that triggered the modal
+                    if (triggerElement) {
+                        var imgSrc = triggerElement.getAttribute('data-img-src'); // Extract info from data-* attributes
+                        var fullSizeImage = document.getElementById('fullSizeImage');
+                        if (fullSizeImage && imgSrc) {
+                            fullSizeImage.src = imgSrc;
+                        }
+                    }
+                });
+            } else {
+                console.error("Modal element #imageModal not found.");
+            }
+
+            // Ensure clicking any .image-clickable updates the modal source before Bootstrap shows it
+            const imageClickables = document.querySelectorAll('.image-clickable');
+            imageClickables.forEach(img => {
+                img.addEventListener('click', function() {
+                    const imgSrc = img.getAttribute('data-img-src');
+                    const fullSizeImage = document.getElementById('fullSizeImage');
+                    if (fullSizeImage && imgSrc) {
+                        fullSizeImage.src = imgSrc;
+                        // Bootstrap JS will handle showing the modal via data-bs-toggle
+                    }
+                });
             });
         });
     </script>
