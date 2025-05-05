@@ -4,37 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - UniMate2</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
+    <!-- Site CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
     <style>
-      @@font-face {
-        font-family: 'LucideIcons';
-        src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
-      }
-      .lucide {
-        font-family: 'LucideIcons';
-        font-size: 1.25rem;
-        line-height: 1;
-        display: inline-block;
-        vertical-align: middle;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8fafc;
-        color: #1f2937;
-      }
-      *:focus-visible {
-        outline: 2px solid #3b82f6;
-        outline-offset: 2px;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+
+        *:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -51,7 +50,7 @@
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <a asp-controller="Users" asp-action="LikeDislikeLog" class="text-gray-600 hover:text-blue-600 transition duration-200 rounded-md px-2 py-1">
-                       Interactions Log
+                        Interactions Log
                     </a>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
@@ -82,7 +81,7 @@
                 }
             </nav>
             <button class="md:hidden text-gray-600 hover:text-blue-600">
-                <span class="lucide">&#xe9a5;</span>
+                <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
     </header>
@@ -100,12 +99,20 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

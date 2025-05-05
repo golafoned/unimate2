@@ -3,99 +3,135 @@
     ViewData["Title"] = "Users Management";
 }
 
-<div class="container mt-4">
-    <h1>Users Management</h1>
-    
-    <div class="mb-3">
-        <div class="btn-group">
-            <a asp-action="Users" asp-route-sortOrder="none" class="btn @(Model.SortOrder == "none" ? "btn-primary" : "btn-outline-primary")">
-                Default
-            </a>
-            <a asp-action="Users" asp-route-sortOrder="likesReceived" class="btn @(Model.SortOrder == "likesReceived" ? "btn-primary" : "btn-outline-primary")">
-                Sort by Likes Received
-            </a>
-            <a asp-action="Users" asp-route-sortOrder="likesGiven" class="btn @(Model.SortOrder == "likesGiven" ? "btn-primary" : "btn-outline-primary")">
-                Sort by Likes Given
-            </a>
-        </div>
+<div class="w-full mt-8 px-4">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Users Management</h1>
+
+    <div class="mb-6 flex flex-wrap gap-2">
+        <a asp-action="Users" asp-route-sortOrder="none"
+           class="inline-block font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-sm
+                  @(Model.SortOrder == "none"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50")">
+            Default
+        </a>
+        <a asp-action="Users" asp-route-sortOrder="likesReceived"
+           class="inline-block font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-sm
+                  @(Model.SortOrder == "likesReceived"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50")">
+            Sort by Likes Received
+        </a>
+        <a asp-action="Users" asp-route-sortOrder="likesGiven"
+           class="inline-block font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-sm
+                  @(Model.SortOrder == "likesGiven"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50")">
+            Sort by Likes Given
+        </a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
+    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-x-auto">
+        <table class="table-fixed w-full text-sm text-gray-600">
+            <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
                 <tr>
-                    <th>User ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Likes Received</th>
-                    <th>Likes Given</th>
-                    <th>Actions</th>
+                    <th class="px-6 py-4 text-left w-48 break-words">User ID</th>
+                    <th class="px-6 py-4 text-left">Name</th>
+                    <th class="px-6 py-4 text-left">Email</th>
+                    <th class="px-6 py-4 text-left">Username</th>
+                    <th class="px-6 py-4 text-left w-24">Likes Received</th>
+                    <th class="px-6 py-4 text-left w-24">Likes Given</th>
+                    <th class="px-6 py-4 text-left w-32">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-100">
                 @foreach (var user in Model.Users)
                 {
-                    <tr>
-                        <td>@user.Id</td>
-                        <td>@user.FirstName @user.LastName</td>
-                        <td>@user.Email</td>
-                        <td>@user.UserName</td>
-                        <td>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 w-48 break-words text-xs">@user.Id</td>
+                        <td class="px-6 py-4">@user.FirstName @user.LastName</td>
+                        <td class="px-6 py-4">@user.Email</td>
+                        <td class="px-6 py-4">@user.UserName</td>
+                        <td class="px-6 py-4">
                             @(Model.LikesReceived.ContainsKey(user.Id) ? Model.LikesReceived[user.Id] : 0)
                         </td>
-                        <td>
+                        <td class="px-6 py-4">
                             @(Model.LikesGiven.ContainsKey(user.Id) ? Model.LikesGiven[user.Id] : 0)
                         </td>
-                        <td>
-                            <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Edit</a>
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="@user.Id" data-username="@user.Email">
-                                Delete
+                        <td class="px-6 py-4 w-32 flex flex-col gap-2">
+                            <a asp-action="EditUser" asp-route-id="@user.Id"
+                               class="flex justify-center items-center bg-blue-600 text-white font-semibold py-2 px-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm text-xs">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </a>
+
+                            <button type="button"
+                                    class="inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-userid="@user.Id" data-username="@user.Email">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
+
+
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
 </div>
 
 <!-- Delete confirmation modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this user? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" asp-action="DeleteUser" method="post">
-                    <input type="hidden" id="userId" name="userId" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
+<div class="fixed z-50 inset-0 hidden items-center justify-center bg-black bg-opacity-50" id="deleteModalOverlay">
+    <div class="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
+        <div class="border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+            <h5 class="text-lg font-semibold text-gray-800" id="deleteModalLabel">Confirm Delete</h5>
+            <button type="button" class="text-gray-500 hover:text-gray-700" id="closeModalBtn">
+                &times;
+            </button>
+        </div>
+        <div class="px-6 py-4 text-gray-700" id="deleteModalBody">
+            Are you sure you want to delete this user? This action cannot be undone.
+        </div>
+        <div class="px-6 py-4 flex justify-end gap-2 border-t border-gray-100">
+            <button type="button"
+                    class="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-200 shadow-sm"
+                    id="cancelModalBtn">
+                Cancel
+            </button>
+            <form id="deleteForm" asp-action="DeleteUser" method="post">
+                <input type="hidden" id="userId" name="userId" />
+                <button type="submit"
+                        class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition">
+                    Delete
+                </button>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const userId = button.getAttribute('data-userid');
-            const username = button.getAttribute('data-username');
-            
-            const modalTitle = this.querySelector('.modal-title');
-            const modalBody = this.querySelector('.modal-body');
-            const userIdInput = document.getElementById('userId');
-            
-            modalTitle.textContent = `Delete User`;
-            modalBody.textContent = `Are you sure you want to delete ${username}? This action cannot be undone.`;
-            userIdInput.value = userId;
+        const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const deleteButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+        const userIdInput = document.getElementById('userId');
+        const deleteModalBody = document.getElementById('deleteModalBody');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const userId = button.getAttribute('data-userid');
+                const username = button.getAttribute('data-username');
+                deleteModalOverlay.classList.remove('hidden');
+                deleteModalBody.textContent = `Are you sure you want to delete ${username}? This action cannot be undone.`;
+                userIdInput.value = userId;
+            });
+        });
+
+        [closeModalBtn, cancelModalBtn].forEach(btn => {
+            btn.addEventListener('click', () => {
+                deleteModalOverlay.classList.add('hidden');
+            });
         });
     </script>
 }
