@@ -18,9 +18,10 @@ public class EventsController(UserManager<User> userManager, IEventsRepository e
     private readonly UserManager<User> _userManager = userManager;
     private readonly IEventsRepository _eventsRepository = eventsRepository;
 
-    [HttpGet]
-    public async Task<IActionResult> Index(string order = "asc", string searchTerm = "")
+    [HttpGet] // Reverted from [HttpGet("Index")]
+    public async Task<IActionResult> Index(string order = "asc", string searchTerm = "", int page = 1)
     {
+        int pageSize = 10; // Кількість елементів на сторінці
         var events = string.IsNullOrWhiteSpace(searchTerm)
             ? await _eventsRepository.GetAllEvents()
             : await _eventsRepository.SearchEvents(searchTerm);
@@ -34,11 +35,21 @@ public class EventsController(UserManager<User> userManager, IEventsRepository e
             events = events.OrderBy(e => e.StartDate).ToList();
         }
 
+        var count = events.Count;
+        var pagedEvents = events.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
         ViewBag.SearchTerm = searchTerm;
-        return View(events);
+        ViewBag.CurrentOrder = order; // Зберігаємо поточний порядок сортування
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+        ViewBag.HasPreviousPage = (page > 1);
+        ViewBag.HasNextPage = (page < ViewBag.TotalPages);
+
+        return View(pagedEvents);
     }
 
-    [HttpGet]
+    [HttpGet] // This maps to "Events/Create"
     public IActionResult Create()
     {
         return View();

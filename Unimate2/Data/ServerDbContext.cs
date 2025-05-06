@@ -179,8 +179,8 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 Id = Guid.NewGuid(),
                 Title = "Community Meetup",
                 Description = "A meetup for community members.",
-                StartDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15), DateTimeKind.Utc),
-                EndDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15), DateTimeKind.Utc),
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15, 14, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 10, 15, 17, 0, 0), DateTimeKind.Utc),
                 Location = "City Park",
             },
             new Event
@@ -188,19 +188,100 @@ public class ServerDbContext(DbContextOptions<ServerDbContext> options)
                 Id = Guid.NewGuid(),
                 Title = "Tech Conference",
                 Description = "Annual technology conference.",
-                StartDate = DateTime.SpecifyKind(new DateTime(2023, 11, 20), DateTimeKind.Utc),
-                EndDate = DateTime.SpecifyKind(new DateTime(2023, 11, 22), DateTimeKind.Utc),
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 11, 20, 9, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 11, 22, 18, 0, 0), DateTimeKind.Utc),
                 Location = "Convention Center",
             },
             new Event
             {
                 Id = Guid.NewGuid(),
-                Title = "Workshop",
-                Description = "Workshop on emerging technologies.",
-                StartDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10), DateTimeKind.Utc),
-                EndDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10), DateTimeKind.Utc),
+                Title = "Workshop on AI",
+                Description = "Workshop on emerging AI technologies.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10, 10, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2023, 12, 10, 16, 0, 0), DateTimeKind.Utc),
                 Location = "Tech Institute",
             },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Art Exhibition",
+                Description = "Exhibition of local artists.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 1, 5, 11, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 1, 7, 19, 0, 0), DateTimeKind.Utc),
+                Location = "Art Gallery",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Music Festival",
+                Description = "Weekend music festival with various bands.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 2, 16, 18, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 2, 18, 23, 0, 0), DateTimeKind.Utc),
+                Location = "Open Air Arena",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Book Fair",
+                Description = "Annual book fair with author signings.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 3, 8, 10, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 3, 10, 17, 0, 0), DateTimeKind.Utc),
+                Location = "Central Library",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Startup Pitch Night",
+                Description = "Entrepreneurs pitch their ideas to investors.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 4, 12, 19, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 4, 12, 22, 0, 0), DateTimeKind.Utc),
+                Location = "Innovation Hub",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Charity Run",
+                Description = "5K charity run for a local cause.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 5, 5, 9, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 5, 5, 12, 0, 0), DateTimeKind.Utc),
+                Location = "Riverside Park",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Film Festival",
+                Description = "Independent film festival showcasing new talents.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 6, 20, 17, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 6, 23, 23, 0, 0), DateTimeKind.Utc),
+                Location = "Indie Cinema",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Food Truck Rally",
+                Description = "Gathering of diverse food trucks.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 7, 14, 12, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 7, 14, 20, 0, 0), DateTimeKind.Utc),
+                Location = "Downtown Square",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "University Hackathon",
+                Description = "24-hour coding competition for students.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 8, 3, 10, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 8, 4, 10, 0, 0), DateTimeKind.Utc),
+                Location = "University Campus - CS Building",
+            },
+            new Event
+            {
+                Id = Guid.NewGuid(),
+                Title = "Alumni Homecoming",
+                Description = "Annual gathering for university alumni.",
+                StartDate = DateTime.SpecifyKind(new DateTime(2024, 9, 21, 15, 0, 0), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(new DateTime(2024, 9, 21, 21, 0, 0), DateTimeKind.Utc),
+                Location = "University Grand Hall",
+            }
         ];
 
         var adminRoleId = Guid.NewGuid().ToString();

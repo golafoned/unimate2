@@ -9,6 +9,7 @@ public class UserDto
     public required string Email { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
+    
     public DateTime BirthDate { get; set; }
     public string University { get; set; } = string.Empty;
     public string Faculty { get; set; } = string.Empty;

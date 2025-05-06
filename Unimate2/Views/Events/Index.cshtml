@@ -73,4 +73,54 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination Controls -->
+    @{
+        var currentPage = (int)ViewBag.CurrentPage;
+        var totalPages = (int)ViewBag.TotalPages;
+        var hasPreviousPage = (bool)ViewBag.HasPreviousPage;
+        var hasNextPage = (bool)ViewBag.HasNextPage;
+        // currentOrder та searchTerm вже визначені на початку файлу
+    }
+
+    @if (totalPages > 1)
+    {
+        <div class="mt-6 flex justify-center items-center space-x-1 sm:space-x-2">
+            @if (hasPreviousPage)
+            {
+                <a href="@Url.Action("Index", "Events", new { page = currentPage - 1, order = currentOrder, searchTerm = searchTerm })"
+                   class="px-3 py-2 sm:px-4 border border-gray-300 text-xs sm:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Previous
+                </a>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                // Логіка для відображення обмеженої кількості номерів сторінок
+                var pageNumberVisible = (i == 1 || i == totalPages || (i >= currentPage - 2 && i <= currentPage + 2));
+                var showEllipsis = (i == currentPage - 3 && currentPage > 4) || (i == currentPage + 3 && currentPage < totalPages - 3);
+
+                if (showEllipsis)
+                {
+                    <span class="px-3 py-2 sm:px-4 border border-transparent text-xs sm:text-sm font-medium rounded-md text-gray-700">...</span>
+                }
+                
+                if (pageNumberVisible)
+                {
+                    <a href="@Url.Action("Index", "Events", new { page = i, order = currentOrder, searchTerm = searchTerm })"
+                       class="px-3 py-2 sm:px-4 border @(i == currentPage ? "border-blue-500 bg-blue-50 text-blue-600" : "border-gray-300 text-gray-700 bg-white hover:bg-gray-50") text-xs sm:text-sm font-medium rounded-md">
+                        @i
+                    </a>
+                }
+            }
+
+            @if (hasNextPage)
+            {
+                <a href="@Url.Action("Index", "Events", new { page = currentPage + 1, order = currentOrder, searchTerm = searchTerm })"
+                   class="px-3 py-2 sm:px-4 border border-gray-300 text-xs sm:text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Next
+                </a>
+            }
+        </div>
+    }
 </div>
