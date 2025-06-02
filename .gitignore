@@ -32,7 +32,6 @@ yarn-error.log
 *.sln.cache
 
 # Ignore database and local environment files
-appsettings.Development.json
 appsettings.Local.json
 localdb.mdf
 *.db
@@ -55,3 +54,5 @@ bower_components/
 
 # Ignore global.json
 global.json
+
+docs/
