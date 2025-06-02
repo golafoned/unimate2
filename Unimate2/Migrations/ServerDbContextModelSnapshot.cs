@@ -3,12 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniMate2.Data;
 
 #nullable disable
 
-namespace Unimate2.Migrations
+namespace UniMate2.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
     partial class ServerDbContextModelSnapshot : ModelSnapshot
@@ -16,28 +15,24 @@ namespace Unimate2.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -50,8 +45,8 @@ namespace Unimate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "744c2bf2-b115-4119-bbda-88c83472baa2",
-                            ConcurrencyStamp = "5698b40d-6aa2-4e70-ba6f-fba48c451a01",
+                            Id = "15fbaefc-4e92-4b9c-af3a-d545bd248bd9",
+                            ConcurrencyStamp = "2d59c08a-7a14-4f03-9b99-1620a82a6469",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -61,19 +56,17 @@ namespace Unimate2.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -86,19 +79,17 @@ namespace Unimate2.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -110,17 +101,17 @@ namespace Unimate2.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -132,10 +123,10 @@ namespace Unimate2.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -146,24 +137,24 @@ namespace Unimate2.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "dc647b87-999f-42ce-a7aa-7de4b535e137",
-                            RoleId = "744c2bf2-b115-4119-bbda-88c83472baa2"
+                            UserId = "2f4dc10e-2cb5-4727-94df-a4468ba9c3d6",
+                            RoleId = "15fbaefc-4e92-4b9c-af3a-d545bd248bd9"
                         });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -174,14 +165,14 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ReportedUserId")
                         .IsRequired()
@@ -204,25 +195,25 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -231,7 +222,7 @@ namespace Unimate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d02c43fb-b132-4911-b55b-9ffe0c73d768"),
+                            Id = new Guid("7342b1b0-2a87-4e43-9c91-976a9f7660e2"),
                             Description = "A meetup for community members.",
                             EndDate = new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "City Park",
@@ -240,7 +231,7 @@ namespace Unimate2.Migrations
                         },
                         new
                         {
-                            Id = new Guid("225abbaf-b65d-449c-8eba-f4a7aa1a3deb"),
+                            Id = new Guid("f91c543b-d755-4621-bee0-2440080c1b89"),
                             Description = "Annual technology conference.",
                             EndDate = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "Convention Center",
@@ -249,7 +240,7 @@ namespace Unimate2.Migrations
                         },
                         new
                         {
-                            Id = new Guid("315df11c-8e17-4f19-991f-dfdc2bcb40a5"),
+                            Id = new Guid("4b01af09-42d9-4354-89b0-5cba68d0e768"),
                             Description = "Workshop on emerging technologies.",
                             EndDate = new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Location = "Tech Institute",
@@ -262,19 +253,19 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ReceiverId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SenderId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -289,18 +280,18 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LikedId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LikerId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -314,99 +305,99 @@ namespace Unimate2.Migrations
             modelBuilder.Entity("UniMate2.Models.Domain.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Faculty")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Gender")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("IsDrinking")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("IsSmoking")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("LookingFor")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Orientation")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("PersonalityType")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("University")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ZodiakSign")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -424,11 +415,11 @@ namespace Unimate2.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dc647b87-999f-42ce-a7aa-7de4b535e137",
+                            Id = "2f4dc10e-2cb5-4727-94df-a4468ba9c3d6",
                             AccessFailedCount = 0,
                             Bio = "Bio5",
                             BirthDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "8ecdb065-fa3b-4d12-97a6-a4794e8dc429",
+                            ConcurrencyStamp = "b9d3ac8b-aed8-4a9b-84cc-c3d78b775a64",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             Faculty = "Faculty2",
@@ -443,20 +434,20 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEFTV/fyVQc49i6Rf/7ZMrS+jhWkokhCDDK/zhMOtvxZJ54RkK1yF0oChQ0p38njUMQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDD0QxEQJP2R89GzFznv4415ae2uIarvf5G5Fo2b2x8TGLq67/mFMSZDx24kP908CQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ceb8685d-82e6-428a-a12d-6fda6c883619",
+                            SecurityStamp = "90192600-5ae5-438d-8f5c-0c954878962f",
                             TwoFactorEnabled = false,
                             University = "University1",
                             UserName = "user1@example.com"
                         },
                         new
                         {
-                            Id = "3a16468a-e854-4b18-bc2e-370ee63d7b69",
+                            Id = "172cbcf0-db76-4f4e-8e9c-e814c95c7b42",
                             AccessFailedCount = 0,
                             Bio = "Bio2",
                             BirthDate = new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "0d346bc2-9f25-4526-b0b0-b35c7d34bac6",
+                            ConcurrencyStamp = "66a74d62-91db-4d2f-bcdb-3446fd08c642",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             Faculty = "Faculty2",
@@ -471,20 +462,20 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEEH7E4QuZWHu65vCQzanMLwKQDG92E/duU4US0QNtMz2gM00/q0no8W9deBbx2eiGA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBg+hKK7T5m2tupDlyqils3TdV+gGxBQ7SckNxPjSsZONRLbqmaZCqZyV293Sg1KkA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bf2c7473-99ec-4e84-9fd8-9861cbcd48cc",
+                            SecurityStamp = "71732e41-20bb-4bc1-9f5c-c3d1671ce19b",
                             TwoFactorEnabled = false,
                             University = "University2",
                             UserName = "user2@example.com"
                         },
                         new
                         {
-                            Id = "81f9e3a8-b73c-4354-80af-a58dffb856d8",
+                            Id = "0037407e-ed16-4bae-8e83-94aa7de52c8c",
                             AccessFailedCount = 0,
                             Bio = "Loves hiking and outdoor adventures.",
                             BirthDate = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "903ebe95-b644-450f-9643-2f35371cdb68",
+                            ConcurrencyStamp = "12a8188d-a5fe-4049-981f-38b2c31551a4",
                             Email = "alice.johnson@example.com",
                             EmailConfirmed = false,
                             Faculty = "Engineering",
@@ -499,20 +490,20 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "ALICE.JOHNSON@EXAMPLE.COM",
                             NormalizedUserName = "ALICE.JOHNSON@EXAMPLE.COM",
                             Orientation = 2,
-                            PasswordHash = "AQAAAAIAAYagAAAAEAkG6+S9vmbJweRFCPhQRYZ3Sp3ASHDGquwdI9vqG8YwKK9yQF+72/qiaCuXLGNOng==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEPuc+p3zRBPfv64RXSFHbwzMBqClj1MNaKwwbwgrxPjv02QlKbT8HoHbYdzJPJ/+w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b1a36fa4-dbf0-4f74-9cc2-ec2ccdfdb711",
+                            SecurityStamp = "bc91dd87-9065-4663-ac36-7992a6e23779",
                             TwoFactorEnabled = false,
                             University = "Tech University",
                             UserName = "alice.johnson@example.com"
                         },
                         new
                         {
-                            Id = "06754d4b-c490-4f86-90c5-ee8b0d7afb14",
+                            Id = "7bdc661a-655e-4c54-86e1-8f118272c707",
                             AccessFailedCount = 0,
                             Bio = "Enjoys cooking and traveling.",
                             BirthDate = new DateTime(1988, 8, 22, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "05257860-2011-4665-883a-b3dc63126277",
+                            ConcurrencyStamp = "8450e169-1d67-466b-b0bc-914110ec4598",
                             Email = "bob.smith@example.com",
                             EmailConfirmed = false,
                             Faculty = "Business",
@@ -527,20 +518,20 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "BOB.SMITH@EXAMPLE.COM",
                             NormalizedUserName = "BOB.SMITH@EXAMPLE.COM",
                             Orientation = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ+W6twiSxPXbHRE92rjRMJBfDPrU9Oi2R4u0KeR/4z1GlziBWFb4RXFlXMvavFfyQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELizYoQ3iK04l3ts431pZEtlEyDvy0LB2HkjdFD14Lpn6OEWJgX/0kztK5v9bqvGWg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "70c2b0cf-7985-4d43-9423-24869e491c64",
+                            SecurityStamp = "24fb37db-b5b9-4550-b65d-e0ee33a3e663",
                             TwoFactorEnabled = false,
                             University = "State University",
                             UserName = "bob.smith@example.com"
                         },
                         new
                         {
-                            Id = "8a533b3e-50a5-45b9-aad4-b1a14e1bd531",
+                            Id = "079841eb-c617-4034-bdd2-14f111282c41",
                             AccessFailedCount = 0,
                             Bio = "Passionate about graphic design and photography.",
                             BirthDate = new DateTime(1992, 3, 30, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "e447feac-cf2f-4154-a697-4e4641d5ca2d",
+                            ConcurrencyStamp = "6f32e25d-7eaf-4913-b7c2-f53a60bf84e8",
                             Email = "carol.davis@example.com",
                             EmailConfirmed = false,
                             Faculty = "Design",
@@ -555,20 +546,20 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "CAROL.DAVIS@EXAMPLE.COM",
                             NormalizedUserName = "CAROL.DAVIS@EXAMPLE.COM",
                             Orientation = 3,
-                            PasswordHash = "AQAAAAIAAYagAAAAEP9tSaXISQRSG67nU/u2Zp2RVeglF4C7xXobG8DhER+8KeL0CJX8cO9vT7d1Bzd3dg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENyIuMmkP3SahLU4uRmpZVCe50E4dhZSTpgZFmDxWKqbdvrIlhRUkyZRQk+3Nurzdg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a4bf3440-9b29-4c12-95db-ca5c1add5462",
+                            SecurityStamp = "15924624-2c1a-4618-8591-bdc8b6405eff",
                             TwoFactorEnabled = false,
                             University = "Arts College",
                             UserName = "carol.davis@example.com"
                         },
                         new
                         {
-                            Id = "6faed1c6-ddf0-4935-a0ee-69bba14ac866",
+                            Id = "3dbffd3e-9477-4b39-92c8-2b242090b768",
                             AccessFailedCount = 0,
                             Bio = "Avid cyclist and technology enthusiast.",
                             BirthDate = new DateTime(1990, 7, 19, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ConcurrencyStamp = "a02a1bca-f07e-4466-b66d-64748311eb81",
+                            ConcurrencyStamp = "b4d70ab7-7228-4731-98ad-07dc7a0d4c2d",
                             Email = "david.miller@example.com",
                             EmailConfirmed = false,
                             Faculty = "Mechanical",
@@ -583,9 +574,9 @@ namespace Unimate2.Migrations
                             NormalizedEmail = "DAVID.MILLER@EXAMPLE.COM",
                             NormalizedUserName = "DAVID.MILLER@EXAMPLE.COM",
                             Orientation = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJT5tMDNjW6i1uq/Ox1Oc/kULcudQKM6ifQhkI3XXiltn40tH512CSvo4xXLynHM0g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL7qdQ52LgKkv+Chqzkg4auk+buNq6ONq8Or05eOqVX+HCywkfp1OBpcTv1YI5rOIQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c8643f05-4055-437b-b51e-c501cb1c7ad6",
+                            SecurityStamp = "6dd2f3d8-e5b8-41a9-95ce-dc50a37944ab",
                             TwoFactorEnabled = false,
                             University = "Engineering Institute",
                             UserName = "david.miller@example.com"
@@ -596,18 +587,18 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DislikedUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DislikingUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -622,17 +613,17 @@ namespace Unimate2.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SerialNumber")
-                        .HasColumnType("integer");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

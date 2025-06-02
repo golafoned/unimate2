@@ -1,15 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Unimate2.Migrations
+namespace UniMate2.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Exam : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,10 +17,10 @@ namespace Unimate2.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,36 +31,36 @@ namespace Unimate2.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: true),
-                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    University = table.Column<string>(type: "text", nullable: true),
-                    Faculty = table.Column<string>(type: "text", nullable: true),
-                    Gender = table.Column<int>(type: "integer", nullable: true),
-                    Orientation = table.Column<int>(type: "integer", nullable: true),
-                    IsSmoking = table.Column<int>(type: "integer", nullable: true),
-                    IsDrinking = table.Column<int>(type: "integer", nullable: true),
-                    IsBanned = table.Column<bool>(type: "boolean", nullable: false),
-                    LookingFor = table.Column<int>(type: "integer", nullable: true),
-                    PersonalityType = table.Column<int>(type: "integer", nullable: true),
-                    ZodiakSign = table.Column<int>(type: "integer", nullable: true),
-                    Bio = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    University = table.Column<string>(type: "TEXT", nullable: true),
+                    Faculty = table.Column<string>(type: "TEXT", nullable: true),
+                    Gender = table.Column<int>(type: "INTEGER", nullable: true),
+                    Orientation = table.Column<int>(type: "INTEGER", nullable: true),
+                    IsSmoking = table.Column<int>(type: "INTEGER", nullable: true),
+                    IsDrinking = table.Column<int>(type: "INTEGER", nullable: true),
+                    IsBanned = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LookingFor = table.Column<int>(type: "INTEGER", nullable: true),
+                    PersonalityType = table.Column<int>(type: "INTEGER", nullable: true),
+                    ZodiakSign = table.Column<int>(type: "INTEGER", nullable: true),
+                    Bio = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,12 +76,12 @@ namespace Unimate2.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Location = table.Column<string>(type: "text", nullable: false)
+                    Location = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,11 +92,11 @@ namespace Unimate2.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,10 +113,10 @@ namespace Unimate2.Migrations
                 name: "AbuseReports",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ReporterId = table.Column<string>(type: "text", nullable: false),
                     ReportedUserId = table.Column<string>(type: "text", nullable: false),
-                    Reason = table.Column<string>(type: "text", nullable: false),
+                    Reason = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -141,11 +140,11 @@ namespace Unimate2.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,10 +161,10 @@ namespace Unimate2.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -182,8 +181,8 @@ namespace Unimate2.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -206,10 +205,10 @@ namespace Unimate2.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,11 +225,11 @@ namespace Unimate2.Migrations
                 name: "FriendRequests",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SenderId = table.Column<string>(type: "text", nullable: true),
-                    ReceiverId = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SenderId = table.Column<string>(type: "TEXT", nullable: true),
+                    ReceiverId = table.Column<string>(type: "TEXT", nullable: true),
                     RequestDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,9 +250,9 @@ namespace Unimate2.Migrations
                 name: "Likes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LikerId = table.Column<string>(type: "text", nullable: false),
-                    LikedId = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LikerId = table.Column<string>(type: "TEXT", nullable: false),
+                    LikedId = table.Column<string>(type: "TEXT", nullable: false),
                     LikedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -277,9 +276,9 @@ namespace Unimate2.Migrations
                 name: "UserDislikes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DislikingUserId = table.Column<string>(type: "text", nullable: false),
-                    DislikedUserId = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DislikingUserId = table.Column<string>(type: "TEXT", nullable: false),
+                    DislikedUserId = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -303,10 +302,10 @@ namespace Unimate2.Migrations
                 name: "UserImages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    ImagePath = table.Column<string>(type: "text", nullable: false),
-                    SerialNumber = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    ImagePath = table.Column<string>(type: "TEXT", nullable: false),
+                    SerialNumber = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,19 +321,19 @@ namespace Unimate2.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "744c2bf2-b115-4119-bbda-88c83472baa2", "5698b40d-6aa2-4e70-ba6f-fba48c451a01", "Admin", "ADMIN" });
+                values: new object[] { "15fbaefc-4e92-4b9c-af3a-d545bd248bd9", "2d59c08a-7a14-4f03-9b99-1620a82a6469", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Bio", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "Faculty", "FirstName", "Gender", "IsBanned", "IsDrinking", "IsSmoking", "LastName", "LockoutEnabled", "LockoutEnd", "LookingFor", "NormalizedEmail", "NormalizedUserName", "Orientation", "PasswordHash", "PersonalityType", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "University", "UserId", "UserName", "ZodiakSign" },
                 values: new object[,]
                 {
-                    { "06754d4b-c490-4f86-90c5-ee8b0d7afb14", 0, "Enjoys cooking and traveling.", new DateTime(1988, 8, 22, 0, 0, 0, 0, DateTimeKind.Utc), "05257860-2011-4665-883a-b3dc63126277", "bob.smith@example.com", false, "Business", "Bob", 0, false, 0, 0, "Smith", false, null, 0, "BOB.SMITH@EXAMPLE.COM", "BOB.SMITH@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAEJ+W6twiSxPXbHRE92rjRMJBfDPrU9Oi2R4u0KeR/4z1GlziBWFb4RXFlXMvavFfyQ==", null, null, false, "70c2b0cf-7985-4d43-9423-24869e491c64", false, "State University", null, "bob.smith@example.com", null },
-                    { "3a16468a-e854-4b18-bc2e-370ee63d7b69", 0, "Bio2", new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "0d346bc2-9f25-4526-b0b0-b35c7d34bac6", "user2@example.com", false, "Faculty2", "FirstName2", 0, false, 0, 1, "LastName2", false, null, 0, "USER2@EXAMPLE.COM", "USER2@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAEEH7E4QuZWHu65vCQzanMLwKQDG92E/duU4US0QNtMz2gM00/q0no8W9deBbx2eiGA==", null, null, false, "bf2c7473-99ec-4e84-9fd8-9861cbcd48cc", false, "University2", null, "user2@example.com", null },
-                    { "6faed1c6-ddf0-4935-a0ee-69bba14ac866", 0, "Avid cyclist and technology enthusiast.", new DateTime(1990, 7, 19, 0, 0, 0, 0, DateTimeKind.Utc), "a02a1bca-f07e-4466-b66d-64748311eb81", "david.miller@example.com", false, "Mechanical", "David", 0, false, 0, 1, "Miller", false, null, 2, "DAVID.MILLER@EXAMPLE.COM", "DAVID.MILLER@EXAMPLE.COM", 1, "AQAAAAIAAYagAAAAEJT5tMDNjW6i1uq/Ox1Oc/kULcudQKM6ifQhkI3XXiltn40tH512CSvo4xXLynHM0g==", null, null, false, "c8643f05-4055-437b-b51e-c501cb1c7ad6", false, "Engineering Institute", null, "david.miller@example.com", null },
-                    { "81f9e3a8-b73c-4354-80af-a58dffb856d8", 0, "Loves hiking and outdoor adventures.", new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Utc), "903ebe95-b644-450f-9643-2f35371cdb68", "alice.johnson@example.com", false, "Engineering", "Alice", 1, false, 2, 1, "Johnson", false, null, 1, "ALICE.JOHNSON@EXAMPLE.COM", "ALICE.JOHNSON@EXAMPLE.COM", 2, "AQAAAAIAAYagAAAAEAkG6+S9vmbJweRFCPhQRYZ3Sp3ASHDGquwdI9vqG8YwKK9yQF+72/qiaCuXLGNOng==", null, null, false, "b1a36fa4-dbf0-4f74-9cc2-ec2ccdfdb711", false, "Tech University", null, "alice.johnson@example.com", null },
-                    { "8a533b3e-50a5-45b9-aad4-b1a14e1bd531", 0, "Passionate about graphic design and photography.", new DateTime(1992, 3, 30, 0, 0, 0, 0, DateTimeKind.Utc), "e447feac-cf2f-4154-a697-4e4641d5ca2d", "carol.davis@example.com", false, "Design", "Carol", 0, false, 1, 2, "Davis", false, null, 3, "CAROL.DAVIS@EXAMPLE.COM", "CAROL.DAVIS@EXAMPLE.COM", 3, "AQAAAAIAAYagAAAAEP9tSaXISQRSG67nU/u2Zp2RVeglF4C7xXobG8DhER+8KeL0CJX8cO9vT7d1Bzd3dg==", null, null, false, "a4bf3440-9b29-4c12-95db-ca5c1add5462", false, "Arts College", null, "carol.davis@example.com", null },
-                    { "dc647b87-999f-42ce-a7aa-7de4b535e137", 0, "Bio5", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "8ecdb065-fa3b-4d12-97a6-a4794e8dc429", "user1@example.com", false, "Faculty2", "FirstName2", 2, false, 0, 1, "LastName2", false, null, 0, "USER1@EXAMPLE.COM", "USER1@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAEFTV/fyVQc49i6Rf/7ZMrS+jhWkokhCDDK/zhMOtvxZJ54RkK1yF0oChQ0p38njUMQ==", null, null, false, "ceb8685d-82e6-428a-a12d-6fda6c883619", false, "University1", null, "user1@example.com", null }
+                    { "0037407e-ed16-4bae-8e83-94aa7de52c8c", 0, "Loves hiking and outdoor adventures.", new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Utc), "12a8188d-a5fe-4049-981f-38b2c31551a4", "alice.johnson@example.com", false, "Engineering", "Alice", 1, false, 2, 1, "Johnson", false, null, 1, "ALICE.JOHNSON@EXAMPLE.COM", "ALICE.JOHNSON@EXAMPLE.COM", 2, "AQAAAAIAAYagAAAAEEPuc+p3zRBPfv64RXSFHbwzMBqClj1MNaKwwbwgrxPjv02QlKbT8HoHbYdzJPJ/+w==", null, null, false, "bc91dd87-9065-4663-ac36-7992a6e23779", false, "Tech University", null, "alice.johnson@example.com", null },
+                    { "079841eb-c617-4034-bdd2-14f111282c41", 0, "Passionate about graphic design and photography.", new DateTime(1992, 3, 30, 0, 0, 0, 0, DateTimeKind.Utc), "6f32e25d-7eaf-4913-b7c2-f53a60bf84e8", "carol.davis@example.com", false, "Design", "Carol", 0, false, 1, 2, "Davis", false, null, 3, "CAROL.DAVIS@EXAMPLE.COM", "CAROL.DAVIS@EXAMPLE.COM", 3, "AQAAAAIAAYagAAAAENyIuMmkP3SahLU4uRmpZVCe50E4dhZSTpgZFmDxWKqbdvrIlhRUkyZRQk+3Nurzdg==", null, null, false, "15924624-2c1a-4618-8591-bdc8b6405eff", false, "Arts College", null, "carol.davis@example.com", null },
+                    { "172cbcf0-db76-4f4e-8e9c-e814c95c7b42", 0, "Bio2", new DateTime(2002, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "66a74d62-91db-4d2f-bcdb-3446fd08c642", "user2@example.com", false, "Faculty2", "FirstName2", 0, false, 0, 1, "LastName2", false, null, 0, "USER2@EXAMPLE.COM", "USER2@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAEBg+hKK7T5m2tupDlyqils3TdV+gGxBQ7SckNxPjSsZONRLbqmaZCqZyV293Sg1KkA==", null, null, false, "71732e41-20bb-4bc1-9f5c-c3d1671ce19b", false, "University2", null, "user2@example.com", null },
+                    { "2f4dc10e-2cb5-4727-94df-a4468ba9c3d6", 0, "Bio5", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "b9d3ac8b-aed8-4a9b-84cc-c3d78b775a64", "user1@example.com", false, "Faculty2", "FirstName2", 2, false, 0, 1, "LastName2", false, null, 0, "USER1@EXAMPLE.COM", "USER1@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAEDD0QxEQJP2R89GzFznv4415ae2uIarvf5G5Fo2b2x8TGLq67/mFMSZDx24kP908CQ==", null, null, false, "90192600-5ae5-438d-8f5c-0c954878962f", false, "University1", null, "user1@example.com", null },
+                    { "3dbffd3e-9477-4b39-92c8-2b242090b768", 0, "Avid cyclist and technology enthusiast.", new DateTime(1990, 7, 19, 0, 0, 0, 0, DateTimeKind.Utc), "b4d70ab7-7228-4731-98ad-07dc7a0d4c2d", "david.miller@example.com", false, "Mechanical", "David", 0, false, 0, 1, "Miller", false, null, 2, "DAVID.MILLER@EXAMPLE.COM", "DAVID.MILLER@EXAMPLE.COM", 1, "AQAAAAIAAYagAAAAEL7qdQ52LgKkv+Chqzkg4auk+buNq6ONq8Or05eOqVX+HCywkfp1OBpcTv1YI5rOIQ==", null, null, false, "6dd2f3d8-e5b8-41a9-95ce-dc50a37944ab", false, "Engineering Institute", null, "david.miller@example.com", null },
+                    { "7bdc661a-655e-4c54-86e1-8f118272c707", 0, "Enjoys cooking and traveling.", new DateTime(1988, 8, 22, 0, 0, 0, 0, DateTimeKind.Utc), "8450e169-1d67-466b-b0bc-914110ec4598", "bob.smith@example.com", false, "Business", "Bob", 0, false, 0, 0, "Smith", false, null, 0, "BOB.SMITH@EXAMPLE.COM", "BOB.SMITH@EXAMPLE.COM", 0, "AQAAAAIAAYagAAAAELizYoQ3iK04l3ts431pZEtlEyDvy0LB2HkjdFD14Lpn6OEWJgX/0kztK5v9bqvGWg==", null, null, false, "24fb37db-b5b9-4550-b65d-e0ee33a3e663", false, "State University", null, "bob.smith@example.com", null }
                 });
 
             migrationBuilder.InsertData(
@@ -342,15 +341,15 @@ namespace Unimate2.Migrations
                 columns: new[] { "Id", "Description", "EndDate", "Location", "StartDate", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("225abbaf-b65d-449c-8eba-f4a7aa1a3deb"), "Annual technology conference.", new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Utc), "Convention Center", new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Tech Conference" },
-                    { new Guid("315df11c-8e17-4f19-991f-dfdc2bcb40a5"), "Workshop on emerging technologies.", new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc), "Tech Institute", new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc), "Workshop" },
-                    { new Guid("d02c43fb-b132-4911-b55b-9ffe0c73d768"), "A meetup for community members.", new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc), "City Park", new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc), "Community Meetup" }
+                    { new Guid("4b01af09-42d9-4354-89b0-5cba68d0e768"), "Workshop on emerging technologies.", new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc), "Tech Institute", new DateTime(2023, 12, 10, 0, 0, 0, 0, DateTimeKind.Utc), "Workshop" },
+                    { new Guid("7342b1b0-2a87-4e43-9c91-976a9f7660e2"), "A meetup for community members.", new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc), "City Park", new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Utc), "Community Meetup" },
+                    { new Guid("f91c543b-d755-4621-bee0-2440080c1b89"), "Annual technology conference.", new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Utc), "Convention Center", new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Tech Conference" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "744c2bf2-b115-4119-bbda-88c83472baa2", "dc647b87-999f-42ce-a7aa-7de4b535e137" });
+                values: new object[] { "15fbaefc-4e92-4b9c-af3a-d545bd248bd9", "2f4dc10e-2cb5-4727-94df-a4468ba9c3d6" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbuseReports_ReportedUserId",

@@ -15,13 +15,11 @@ namespace UniMate2.Models.Domain
         public AddictionStatus? IsSmoking { get; set; }
         public AddictionStatus? IsDrinking { get; set; }
         public bool IsBanned { get; set; } = false;
-
         public LookingForEnum? LookingFor { get; set; }
         public PersonalityType? PersonalityType { get; set; }
         public ZodiakSign? ZodiakSign { get; set; }
         public string? Bio { get; set; } = string.Empty;
         public List<User>? Friends { get; set; } = [];
         public List<UserImage>? Images { get; set; } = [];
-
     }
 }

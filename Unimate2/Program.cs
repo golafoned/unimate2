@@ -37,7 +37,7 @@ else
     }
 }
 
-builder.Services.AddDbContext<ServerDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ServerDbContext>(options => options.UseSqlite(connectionString));
 
 // Register repositories in the right order to avoid circular dependencies
 builder.Services.AddScoped<IDislikeRepository, DislikeRepository>();
